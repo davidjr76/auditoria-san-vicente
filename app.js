@@ -79,11 +79,18 @@ async function sincronizarDatos() {
         return;
     }
 
+    // Cambiamos el estado del botón para que el usuario sepa que está cargando
+    const btn = document.querySelector('.btn-info');
+    const textoOriginal = btn.innerText;
+    btn.innerText = "⏳ Sincronizando...";
+    btn.disabled = true;
+
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
-            body: JSON.stringify(pendientes),
-            headers: { 'Content-Type': 'application/json' }
+            // AQUÍ ESTÁ EL TRUCO: Usar text/plain evita el bloqueo del navegador (CORS)
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+            body: JSON.stringify(pendientes)
         });
 
         if (response.ok) {
@@ -91,10 +98,15 @@ async function sincronizarDatos() {
             localStorage.removeItem('pendientesGPON'); // Limpiar memoria
             actualizarContador();
         } else {
-            alert("Error en el servidor. Intenta de nuevo.");
+            alert("El servidor de Google rechazó los datos. Revisa los permisos en Apps Script.");
         }
     } catch (error) {
-        alert("Error de red al sincronizar.");
+        console.error(error);
+        alert("Error de red al sincronizar. Revisa tu conexión a internet o la URL del script.");
+    } finally {
+        // Restauramos el botón
+        btn.innerText = textoOriginal;
+        btn.disabled = false;
     }
 }
 
