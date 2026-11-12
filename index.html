@@ -28,6 +28,7 @@
             <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-clientes">Clientes</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-incidencias">Incidencias</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-success" data-bs-toggle="pill" data-bs-target="#tab-resumen">📊 Resumen</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-secondary" data-bs-toggle="pill" data-bs-target="#tab-sectores">⚙️ Sectores</button></li>
         </ul>
     </div>
 
@@ -83,14 +84,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select" required>
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                                <option value="SECTOR-03">SECTOR-03</option>
-                                <option value="SECTOR-04">SECTOR-04</option>
-                                <option value="SECTOR-05">SECTOR-05</option>
-                            </select>
+                            <select name="SECTOR" class="form-select" required></select>
                         </div>
                     </div>
                     <div class="row">
@@ -138,7 +132,7 @@
                 </form>
             </div>
 
-            <!-- 3. Cajas NAP (CORREGIDO CON 1:2 Y TIPOS DE CAJA) -->
+            <!-- 3. Cajas NAP -->
             <div class="tab-pane fade" id="tab-naps" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Caja NAP</h5>
@@ -148,11 +142,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select" required>
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                            </select>
+                            <select name="SECTOR" class="form-select" required></select>
                         </div>
                     </div>
                     <div class="row">
@@ -164,14 +154,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Tipo_Caja</label>
-                            <select name="Tipo_Caja" class="form-select">
-                                <option value="Aerea">Aerea</option>
-                                <option value="Subterranea">Subterranea</option>
-                                <option value="Fachada">Fachada</option>
-                                <option value="Armario">Armario</option>
-                                <option value="Mufa">Mufa</option>
-                                <option value="ODF">ODF</option>
-                            </select>
+                            <select name="Tipo_Caja" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
@@ -216,7 +199,7 @@
                 </form>
             </div>
 
-            <!-- 4. Empalmes (CORREGIDO CON TODOS LOS TIPOS DE CAJA) -->
+            <!-- 4. Empalmes -->
             <div class="tab-pane fade" id="tab-empalmes" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Empalme</h5>
@@ -226,11 +209,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select" required>
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                            </select>
+                            <select name="SECTOR" class="form-select" required></select>
                         </div>
                     </div>
                     <div class="row">
@@ -241,14 +220,7 @@
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Tipo_Caja</label>
-                            <select name="Tipo_Caja" class="form-select">
-                                <option value="Aerea">Aerea</option>
-                                <option value="Subterranea">Subterranea</option>
-                                <option value="Fachada">Fachada</option>
-                                <option value="Armario">Armario</option>
-                                <option value="Mufa">Mufa</option>
-                                <option value="ODF">ODF</option>
-                            </select>
+                            <select name="Tipo_Caja" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
@@ -281,7 +253,7 @@
                 </form>
             </div>
 
-            <!-- 5. Hilos / Fusiones (CORREGIDO CON TODOS LOS COLORES) -->
+            <!-- 5. Hilos / Fusiones -->
             <div class="tab-pane fade" id="tab-hilos" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Hilos</h5>
@@ -295,75 +267,19 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>Cable_Origen</label><input type="text" name="Cable_Origen" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Buffer_Origen</label>
-                            <select name="Buffer_Origen" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="AZUL">AZUL</option>
-                                <option value="NARANJA">NARANJA</option>
-                                <option value="VERDE">VERDE</option>
-                                <option value="MARRON">MARRON</option>
-                                <option value="GRIS">GRIS</option>
-                                <option value="BLANCO">BLANCO</option>
-                                <option value="ROJO">ROJO</option>
-                                <option value="NEGRO">NEGRO</option>
-                                <option value="AMARILLO">AMARILLO</option>
-                                <option value="VIOLETA">VIOLETA</option>
-                                <option value="ROSA">ROSA</option>
-                                <option value="AQUA">AQUA</option>
-                            </select>
+                            <select name="Buffer_Origen" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Hilo_Origen</label><input type="text" name="Hilo_Origen" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Color_Origen</label>
-                            <select name="Color_Origen" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="Azul">Azul</option>
-                                <option value="Naranja">Naranja</option>
-                                <option value="Verde">Verde</option>
-                                <option value="Marron">Marron</option>
-                                <option value="Gris">Gris</option>
-                                <option value="Blanco">Blanco</option>
-                                <option value="Rojo">Rojo</option>
-                                <option value="Negro">Negro</option>
-                                <option value="Amarillo">Amarillo</option>
-                                <option value="Violeta">Violeta</option>
-                                <option value="Rosa">Rosa</option>
-                                <option value="Aqua">Aqua</option>
-                            </select>
+                            <select name="Color_Origen" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Cable_Destino</label><input type="text" name="Cable_Destino" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Buffer_Destino</label>
-                            <select name="Buffer_Destino" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="AZUL">AZUL</option>
-                                <option value="NARANJA">NARANJA</option>
-                                <option value="VERDE">VERDE</option>
-                                <option value="MARRON">MARRON</option>
-                                <option value="GRIS">GRIS</option>
-                                <option value="BLANCO">BLANCO</option>
-                                <option value="ROJO">ROJO</option>
-                                <option value="NEGRO">NEGRO</option>
-                                <option value="AMARILLO">AMARILLO</option>
-                                <option value="VIOLETA">VIOLETA</option>
-                                <option value="ROSA">ROSA</option>
-                                <option value="AQUA">AQUA</option>
-                            </select>
+                            <select name="Buffer_Destino" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Hilo_Destino</label><input type="text" name="Hilo_Destino" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Color_Destino</label>
-                            <select name="Color_Destino" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="Azul">Azul</option>
-                                <option value="Naranja">Naranja</option>
-                                <option value="Verde">Verde</option>
-                                <option value="Marron">Marron</option>
-                                <option value="Gris">Gris</option>
-                                <option value="Blanco">Blanco</option>
-                                <option value="Rojo">Rojo</option>
-                                <option value="Negro">Negro</option>
-                                <option value="Amarillo">Amarillo</option>
-                                <option value="Violeta">Violeta</option>
-                                <option value="Rosa">Rosa</option>
-                                <option value="Aqua">Aqua</option>
-                            </select>
+                            <select name="Color_Destino" class="form-select"></select>
                         </div>
                     </div>
                     <div class="row">
@@ -396,11 +312,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Cable</label><input type="text" name="ID_Cable" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                            </select>
+                            <select name="SECTOR" class="form-select"></select>
                         </div>
                     </div>
                     <div class="row">
@@ -459,11 +371,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Cliente</label><input type="text" name="ID_Cliente" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                            </select>
+                            <select name="SECTOR" class="form-select"></select>
                         </div>
                     </div>
                     <div class="mb-2"><label>Nombre_Cliente</label><input type="text" name="Nombre_Cliente" class="form-control"></div>
@@ -504,11 +412,7 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Incidencia</label><input type="text" name="ID_Incidencia" class="form-control" required></div>
                         <div class="col-6 mb-2"><label>SECTOR</label>
-                            <select name="SECTOR" class="form-select">
-                                <option value="">Seleccione...</option>
-                                <option value="SECTOR-01">SECTOR-01</option>
-                                <option value="SECTOR-02">SECTOR-02</option>
-                            </select>
+                            <select name="SECTOR" class="form-select"></select>
                         </div>
                         <div class="col-6 mb-2"><label>Fecha</label><input type="date" name="Fecha" class="form-control fecha-incidencia"></div>
                         <div class="col-6 mb-2"><label>Responsable</label><input type="text" name="Responsable" class="form-control auditor-auto"></div>
@@ -562,6 +466,24 @@
                     <div class="col-4"><div class="card p-2 bg-white border-success"><small>Postes</small><h3 class="text-success" id="total-postes">-</h3></div></div>
                     <div class="col-4"><div class="card p-2 bg-white border-success"><small>NAPs</small><h3 class="text-success" id="total-naps">-</h3></div></div>
                     <div class="col-4"><div class="card p-2 bg-white border-success"><small>Empalmes</small><h3 class="text-success" id="total-empalmes">-</h3></div></div>
+                </div>
+            </div>
+
+            <!-- 10. Sectores (Catálogos) -->
+            <div class="tab-pane fade" id="tab-sectores" role="tabpanel">
+                <div class="card p-3 shadow-sm mb-3">
+                    <h5 class="text-secondary border-bottom pb-2">Agregar Nuevo Sector</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" id="nuevo-sector-input" class="form-control" placeholder="Ej: SECTOR-31" style="text-transform: uppercase;">
+                        <button class="btn btn-primary" type="button" onclick="agregarNuevoSector()">Agregar</button>
+                    </div>
+                    <small class="text-muted">Al agregarlo, se actualizará automáticamente en las listas de Postes, NAPs, Empalmes, etc.</small>
+                </div>
+                <div class="card p-3 shadow-sm">
+                    <h5 class="text-secondary border-bottom pb-2">Sectores Disponibles</h5>
+                    <ul id="lista-sectores" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Se cargan dinámicamente -->
+                    </ul>
                 </div>
             </div>
 
