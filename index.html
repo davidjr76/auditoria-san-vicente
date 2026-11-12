@@ -9,6 +9,7 @@
 </head>
 <body class="bg-light">
 
+    <!-- Barra Superior -->
     <nav class="navbar navbar-dark bg-primary sticky-top shadow-sm">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">Auditoría San Vicente</span>
@@ -16,7 +17,7 @@
         </div>
     </nav>
 
-    <!-- Menú Deslizable -->
+    <!-- Menú Deslizable con las 10 Pestañas -->
     <div class="bg-white shadow-sm sticky-top" style="top: 56px; z-index: 1000;">
         <ul class="nav nav-pills flex-nowrap overflow-auto p-2" id="pills-tab" role="tablist" style="scrollbar-width: none;">
             <li class="nav-item"><button class="nav-link active text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-olts">OLTs</button></li>
@@ -474,13 +475,17 @@
                 <div class="card p-3 shadow-sm mb-3">
                     <h5 class="text-secondary border-bottom pb-2">Agregar Nuevo Sector</h5>
                     <div class="input-group mb-3">
-                        <input type="text" id="nuevo-sector-input" class="form-control" placeholder="Ej: SECTOR-31" style="text-transform: uppercase;">
+                        <input type="text" id="nuevo-sector-input" class="form-control" placeholder="Ej: VIÑEDO 1" style="text-transform: uppercase;">
                         <button class="btn btn-primary" type="button" onclick="agregarNuevoSector()">Agregar</button>
                     </div>
                     <small class="text-muted">Al agregarlo, se actualizará automáticamente en las listas de Postes, NAPs, Empalmes, etc.</small>
                 </div>
+                
                 <div class="card p-3 shadow-sm">
-                    <h5 class="text-secondary border-bottom pb-2">Sectores Disponibles</h5>
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                        <h5 class="text-secondary mb-0">Sectores Disponibles</h5>
+                        <button class="btn btn-sm btn-outline-danger" onclick="borrarTodosLosSectores()">🗑️ Borrar Todo</button>
+                    </div>
                     <ul id="lista-sectores" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
                         <!-- Se cargan dinámicamente -->
                     </ul>
