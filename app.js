@@ -220,10 +220,8 @@ async function sincronizarDatos(silencioso = false) {
     }
 
     const btn = document.querySelector('.btn-info');
-    const btnDash = document.querySelector('button[onclick="sincronizarDatos()"]');
     if(!silencioso) {
         btn.innerText = "⏳ Sincronizando...";
-        if(btnDash) btnDash.innerText = "⏳ Sincronizando...";
         btn.disabled = true;
     }
 
@@ -235,7 +233,16 @@ async function sincronizarDatos(silencioso = false) {
             body: JSON.stringify(todoParaEnviar)
         });
 
-        if (response.ok) {
+        // Si Google responde con un error HTTP (400, 500, etc.)
+        if (!response.ok) {
+            const textoError = await response.text();
+            throw new Error(`Error HTTP ${response.status}: ${textoError.substring(0, 100)}`);
+        }
+
+        // Si responde OK, intentamos leer el JSON
+        const jsonRespuesta = await response.json();
+        
+        if (jsonRespuesta.status === "success") {
             if(!silencioso) alert("¡Sincronización exitosa con el Excel!");
             localStorage.removeItem('pendientesGPON');
             actualizarContador();
@@ -245,19 +252,21 @@ async function sincronizarDatos(silencioso = false) {
             }
             obtenerResumenNube(); 
         } else {
-            if(!silencioso) alert("Error del servidor. Revisa los permisos en Apps Script.");
+            // Error controlado por nosotros en Apps Script
+            throw new Error(`Google dice: ${jsonRespuesta.message}`);
         }
+
     } catch (error) {
-        if(!silencioso) alert("Error de red al sincronizar.");
+        // AQUÍ SALDRÁ EL ERROR REAL
+        alert("❌ ERROR AL SINCRONIZAR:\n\n" + error.message);
+        console.error(error);
     } finally {
         if(!silencioso) {
             btn.innerText = "🔄 Sincronizar";
-            if(btnDash) btnDash.innerText = "🔄 Sincronizar Todo";
             btn.disabled = false;
         }
     }
 }
-
 // 9. OBTENER TOTALES DE LA NUBE
 async function obtenerResumenNube() {
     if (!navigator.onLine) return;
