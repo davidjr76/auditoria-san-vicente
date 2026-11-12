@@ -470,15 +470,16 @@
                 </div>
             </div>
 
-                       <!-- 10. Sectores (Catálogos) -->
+                                   <!-- 10. Sectores (Catálogos) -->
             <div class="tab-pane fade" id="tab-sectores" role="tabpanel">
                 <div class="card p-3 shadow-sm mb-3">
-                    <h5 class="text-secondary border-bottom pb-2">Agregar Nuevo Sector</h5>
+                    <h5 class="text-secondary border-bottom pb-2" id="titulo-form-sector">Agregar Nuevo Sector</h5>
                     <div class="input-group mb-3">
                         <input type="text" id="nuevo-sector-input" class="form-control" placeholder="Ej: VIÑEDO 1" style="text-transform: uppercase;">
-                        <button class="btn btn-primary" type="button" onclick="agregarNuevoSector()">Agregar</button>
+                        <button class="btn btn-primary" type="button" id="btn-accion-sector" onclick="guardarSector()">Agregar</button>
                     </div>
-                    <small class="text-muted">Al agregarlo, subirá el contador de pendientes y estará disponible en todas las listas.</small>
+                    <button class="btn btn-sm btn-outline-secondary w-100" id="btn-cancelar-edicion" onclick="cancelarEdicion()" style="display: none;">Cancelar Edición</button>
+                    <small class="text-muted mt-2 d-block">Los cambios se sincronizarán con el Excel al presionar "Sincronizar".</small>
                 </div>
                 
                 <div class="card p-3 shadow-sm">
