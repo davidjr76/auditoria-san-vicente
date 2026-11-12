@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría GPON San Vicente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="bg-light">
+
+    <!-- Barra Superior -->
+    <nav class="navbar navbar-dark bg-primary sticky-top mb-3 shadow-sm">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Auditoría San Vicente</span>
+            <span class="badge bg-light text-dark" id="statusConexion">Online</span>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <!-- Pestañas (Tabs) -->
+        <ul class="nav nav-pills nav-fill mb-3 sticky-top" style="top: 56px; background: #f8f9fa; padding: 10px 0; z-index: 1000;" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-postes-tab" data-bs-toggle="pill" data-bs-target="#pills-postes" type="button">Postes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-naps-tab" data-bs-toggle="pill" data-bs-target="#pills-naps" type="button">Cajas NAP</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-empalmes-tab" data-bs-toggle="pill" data-bs-target="#pills-empalmes" type="button">Empalmes</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-clientes-tab" data-bs-toggle="pill" data-bs-target="#pills-clientes" type="button">Clientes</button>
+            </li>
+        </ul>
+
+        <!-- Contenido de las Pestañas -->
+        <div class="tab-content" id="pills-tabContent">
+            
+            <!-- PESTAÑA 1: POSTES -->
+            <div class="tab-pane fade show active" id="pills-postes" role="tabpanel">
+                <form id="form-poste" class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Poste</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Poste">
+                    
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control" placeholder="POST-SV-001" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" placeholder="SECTOR-01" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+
+                    <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Tipo_Poste</label>
+                            <select name="Tipo_Poste" class="form-select"><option>Concreto</option><option>Madera</option><option>Metalico</option><option>Fibra</option></select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Propietario</label>
+                            <select name="Propietario" class="form-select"><option>Propio</option><option>Tercero</option><option>Compartido</option></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label>
+                            <select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option><option>Inclinado</option></select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Tiene_Caja</label>
+                            <select name="Tiene_Caja" class="form-select"><option>NO</option><option>SI</option></select>
+                        </div>
+                    </div>
+                    <div class="mb-3"><label>ID_Caja_Asociada</label><input type="text" name="ID_Caja_Asociada" class="form-control" placeholder="NAP-SV-001"></div>
+                    
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Poste</button>
+                </form>
+            </div>
+
+            <!-- PESTAÑA 2: CAJAS NAP -->
+            <div class="tab-pane fade" id="pills-naps" role="tabpanel">
+                <form id="form-nap" class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Caja NAP</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="NAP">
+                    
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control" placeholder="NAP-SV-001" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+
+                    <div class="mb-2"><label>ID_Poste (Asociado)</label><input type="text" name="ID_Poste" class="form-control" placeholder="POST-SV-001"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Tipo_Caja</label>
+                            <select name="Tipo_Caja" class="form-select"><option>Aerea</option><option>Subterranea</option><option>Fachada</option></select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Splitter_Ratio</label>
+                            <select name="Splitter_Ratio" class="form-select"><option>1:8</option><option>1:16</option><option>1:4</option></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 mb-2"><label>Puertos_Totales</label><input type="number" name="Puertos_Totales" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Libres</label><input type="number" name="Puertos_Libres" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Ocupados</label><input type="number" name="Puertos_Ocupados" class="form-control"></div>
+                    </div>
+                    <div class="mb-3"><label>ID_OLT</label>
+                        <select name="ID_OLT" class="form-select"><option>OLT-VIEJA</option><option>OLT-NUEVA</option></select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar NAP</button>
+                </form>
+            </div>
+
+            <!-- PESTAÑA 3: EMPALMES -->
+            <div class="tab-pane fade" id="pills-empalmes" role="tabpanel">
+                <form id="form-empalme" class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Empalme</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Empalme">
+                    
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control" placeholder="EMP-SV-01" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+
+                    <div class="mb-2"><label>Tipo_Caja</label><input type="text" name="Tipo_Caja" class="form-control" placeholder="Mufa"></div>
+                    <div class="mb-2"><label>Cables_Ingresan</label><input type="text" name="Cables_Ingresan" class="form-control" placeholder="TRK-SV-48H / SUB-SV-12H"></div>
+                    <div class="row">
+                        <div class="col-4 mb-2"><label>Bandejas</label><input type="number" name="Numero_Bandejas" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Hilos Libres</label><input type="number" name="Hilos_Libres" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Hilos Dañados</label><input type="number" name="Hilos_Dañados" class="form-control"></div>
+                    </div>
+                    <div class="mb-3"><label>Reserva_Buffer</label><input type="text" name="Reserva_Buffer" class="form-control" placeholder="Buffer verde (5 hilos)"></div>
+                    
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Empalme</button>
+                </form>
+            </div>
+
+            <!-- PESTAÑA 4: CLIENTES -->
+            <div class="tab-pane fade" id="pills-clientes" role="tabpanel">
+                <form id="form-cliente" class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Cliente</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Cliente">
+                    
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Cliente</label><input type="text" name="ID_Cliente" class="form-control" placeholder="CLI-SV-0001" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="mb-2"><label>Nombre_Cliente</label><input type="text" name="Nombre_Cliente" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control" placeholder="NAP-SV-001"></div>
+                        <div class="col-6 mb-2"><label>Puerto_NAP</label><input type="text" name="Puerto_NAP" class="form-control" placeholder="1"></div>
+                    </div>
+                    <div class="mb-3"><label>Serial_ONT</label><input type="text" name="Serial_ONT" class="form-control"></div>
+                    
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Cliente</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Panel de Sincronización flotante -->
+        <div class="card p-3 mt-4 shadow-sm bg-white sticky-bottom mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-0">Pendientes por enviar</h6>
+                    <h3 class="mb-0 text-primary" id="contadorPendientes">0</h3>
+                </div>
+                <button type="button" class="btn btn-info text-white px-4" onclick="sincronizarDatos()">🔄 Sincronizar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
