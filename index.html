@@ -16,7 +16,7 @@
         </div>
     </nav>
 
-    <!-- Menú Deslizable con todas las pestañas -->
+    <!-- Menú Deslizable -->
     <div class="bg-white shadow-sm sticky-top" style="top: 56px; z-index: 1000;">
         <ul class="nav nav-pills flex-nowrap overflow-auto p-2" id="pills-tab" role="tablist" style="scrollbar-width: none;">
             <li class="nav-item"><button class="nav-link active text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-olts">OLTs</button></li>
@@ -90,11 +90,6 @@
                                 <option value="SECTOR-03">SECTOR-03</option>
                                 <option value="SECTOR-04">SECTOR-04</option>
                                 <option value="SECTOR-05">SECTOR-05</option>
-                                <option value="SECTOR-06">SECTOR-06</option>
-                                <option value="SECTOR-07">SECTOR-07</option>
-                                <option value="SECTOR-08">SECTOR-08</option>
-                                <option value="SECTOR-09">SECTOR-09</option>
-                                <option value="SECTOR-10">SECTOR-10</option>
                             </select>
                         </div>
                     </div>
@@ -143,7 +138,7 @@
                 </form>
             </div>
 
-            <!-- 3. Cajas NAP -->
+            <!-- 3. Cajas NAP (CORREGIDO CON 1:2 Y TIPOS DE CAJA) -->
             <div class="tab-pane fade" id="tab-naps" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Caja NAP</h5>
@@ -157,8 +152,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="SECTOR-01">SECTOR-01</option>
                                 <option value="SECTOR-02">SECTOR-02</option>
-                                <option value="SECTOR-03">SECTOR-03</option>
-                                <!-- Agrega hasta el 30 si lo necesitas -->
                             </select>
                         </div>
                     </div>
@@ -223,7 +216,7 @@
                 </form>
             </div>
 
-            <!-- 4. Empalmes -->
+            <!-- 4. Empalmes (CORREGIDO CON TODOS LOS TIPOS DE CAJA) -->
             <div class="tab-pane fade" id="tab-empalmes" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Empalme</h5>
@@ -237,7 +230,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="SECTOR-01">SECTOR-01</option>
                                 <option value="SECTOR-02">SECTOR-02</option>
-                                <!-- Agrega hasta el 30 si lo necesitas -->
                             </select>
                         </div>
                     </div>
@@ -250,9 +242,11 @@
                     <div class="row">
                         <div class="col-6 mb-2"><label>Tipo_Caja</label>
                             <select name="Tipo_Caja" class="form-select">
-                                <option value="Mufa">Mufa</option>
-                                <option value="NAP">NAP</option>
+                                <option value="Aerea">Aerea</option>
+                                <option value="Subterranea">Subterranea</option>
+                                <option value="Fachada">Fachada</option>
                                 <option value="Armario">Armario</option>
+                                <option value="Mufa">Mufa</option>
                                 <option value="ODF">ODF</option>
                             </select>
                         </div>
@@ -287,7 +281,7 @@
                 </form>
             </div>
 
-            <!-- 5. Hilos / Fusiones -->
+            <!-- 5. Hilos / Fusiones (CORREGIDO CON TODOS LOS COLORES) -->
             <div class="tab-pane fade" id="tab-hilos" role="tabpanel">
                 <form class="card p-3 shadow-sm form-auditoria">
                     <h5 class="text-primary border-bottom pb-2">Registro de Hilos</h5>
@@ -302,6 +296,7 @@
                         <div class="col-6 mb-2"><label>Cable_Origen</label><input type="text" name="Cable_Origen" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Buffer_Origen</label>
                             <select name="Buffer_Origen" class="form-select">
+                                <option value="">Seleccione...</option>
                                 <option value="AZUL">AZUL</option>
                                 <option value="NARANJA">NARANJA</option>
                                 <option value="VERDE">VERDE</option>
@@ -319,6 +314,7 @@
                         <div class="col-6 mb-2"><label>Hilo_Origen</label><input type="text" name="Hilo_Origen" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Color_Origen</label>
                             <select name="Color_Origen" class="form-select">
+                                <option value="">Seleccione...</option>
                                 <option value="Azul">Azul</option>
                                 <option value="Naranja">Naranja</option>
                                 <option value="Verde">Verde</option>
@@ -336,6 +332,7 @@
                         <div class="col-6 mb-2"><label>Cable_Destino</label><input type="text" name="Cable_Destino" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Buffer_Destino</label>
                             <select name="Buffer_Destino" class="form-select">
+                                <option value="">Seleccione...</option>
                                 <option value="AZUL">AZUL</option>
                                 <option value="NARANJA">NARANJA</option>
                                 <option value="VERDE">VERDE</option>
@@ -353,6 +350,7 @@
                         <div class="col-6 mb-2"><label>Hilo_Destino</label><input type="text" name="Hilo_Destino" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Color_Destino</label>
                             <select name="Color_Destino" class="form-select">
+                                <option value="">Seleccione...</option>
                                 <option value="Azul">Azul</option>
                                 <option value="Naranja">Naranja</option>
                                 <option value="Verde">Verde</option>
@@ -402,7 +400,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="SECTOR-01">SECTOR-01</option>
                                 <option value="SECTOR-02">SECTOR-02</option>
-                                <!-- Agrega hasta el 30 si lo necesitas -->
                             </select>
                         </div>
                     </div>
@@ -466,7 +463,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="SECTOR-01">SECTOR-01</option>
                                 <option value="SECTOR-02">SECTOR-02</option>
-                                <!-- Agrega hasta el 30 si lo necesitas -->
                             </select>
                         </div>
                     </div>
@@ -512,7 +508,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="SECTOR-01">SECTOR-01</option>
                                 <option value="SECTOR-02">SECTOR-02</option>
-                                <!-- Agrega hasta el 30 si lo necesitas -->
                             </select>
                         </div>
                         <div class="col-6 mb-2"><label>Fecha</label><input type="date" name="Fecha" class="form-control fecha-incidencia"></div>
