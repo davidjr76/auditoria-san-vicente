@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría GPON San Vicente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-primary sticky-top shadow-sm">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Auditoría San Vicente</span>
+            <span class="badge bg-light text-dark" id="statusConexion">Online</span>
+        </div>
+    </nav>
+
+    <!-- Menú Deslizable con todas las pestañas -->
+    <div class="bg-white shadow-sm sticky-top" style="top: 56px; z-index: 1000;">
+        <ul class="nav nav-pills flex-nowrap overflow-auto p-2" id="pills-tab" role="tablist" style="scrollbar-width: none;">
+            <li class="nav-item"><button class="nav-link active text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-olts">OLTs</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-postes">Postes</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-naps">Cajas NAP</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-empalmes">Empalmes</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-hilos">Hilos</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-troncales">Troncales</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-clientes">Clientes</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-incidencias">Incidencias</button></li>
+            <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-success" data-bs-toggle="pill" data-bs-target="#tab-resumen">📊 Resumen</button></li>
+        </ul>
+    </div>
+
+    <div class="container pb-5 mt-3">
+        <div class="tab-content" id="pills-tabContent">
+            
+            <!-- 1. OLTs -->
+            <div class="tab-pane fade show active" id="tab-olts" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de OLT</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="OLT">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_OLT</label><input type="text" name="ID_OLT" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>Nombre</label><input type="text" name="Nombre" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Marca</label><input type="text" name="Marca" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label>Ubicacion</label><input type="text" name="Ubicacion" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Activa</option><option>En mantenimiento</option><option>Fuera de servicio</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar OLT</button>
+                </form>
+            </div>
+
+            <!-- 2. Postes -->
+            <div class="tab-pane fade" id="tab-postes" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Poste</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Poste">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+                    <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Tipo_Poste</label><select name="Tipo_Poste" class="form-select"><option>Concreto</option><option>Madera</option><option>Metalico</option><option>Fibra</option></select></div>
+                        <div class="col-6 mb-2"><label>Propietario</label><select name="Propietario" class="form-select"><option>Propio</option><option>Tercero</option><option>Compartido</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option><option>Inclinado</option></select></div>
+                        <div class="col-6 mb-2"><label>Tiene_Caja</label><select name="Tiene_Caja" class="form-select"><option>NO</option><option>SI</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>ID_Caja_Asociada</label><input type="text" name="ID_Caja_Asociada" class="form-control"></div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Poste</button>
+                </form>
+            </div>
+
+            <!-- 3. Cajas NAP -->
+            <div class="tab-pane fade" id="tab-naps" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Caja NAP</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="NAP">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+                    <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Tipo_Caja</label><select name="Tipo_Caja" class="form-select"><option>Aerea</option><option>Subterranea</option><option>Fachada</option></select></div>
+                        <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Splitter_Ratio</label><select name="Splitter_Ratio" class="form-select"><option>1:8</option><option>1:16</option><option>1:4</option></select></div>
+                        <div class="col-6 mb-2"><label>Cant_Splitters</label><input type="number" name="Cantidad_Splitters" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Totales</label><input type="number" name="Puertos_Totales" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Libres</label><input type="number" name="Puertos_Libres" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Ocupados</label><input type="number" name="Puertos_Ocupados" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
+                        <div class="col-6 mb-2"><label>Troncal_Alim</label><input type="text" name="Troncal_Alimentacion" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>ID_OLT</label><select name="ID_OLT" class="form-select"><option>OLT-VIEJA</option><option>OLT-NUEVA</option></select></div>
+                        <div class="col-6 mb-2"><label>Etiquetado</label><select name="Etiquetado" class="form-select"><option>SI</option><option>NO</option><option>Reemplazado</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar NAP</button>
+                </form>
+            </div>
+
+            <!-- 4. Empalmes -->
+            <div class="tab-pane fade" id="tab-empalmes" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Empalme</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Empalme">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+                    <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Tipo_Caja</label><input type="text" name="Tipo_Caja" class="form-control" placeholder="Mufa"></div>
+                        <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Cables_Ingresan</label><input type="text" name="Cables_Ingresan" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>Bandejas</label><input type="number" name="Numero_Bandejas" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>H. Libres</label><input type="number" name="Hilos_Libres" class="form-control"></div>
+                        <div class="col-4 mb-2"><label>H. Dañados</label><input type="number" name="Hilos_Dañados" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label>Hilos_Fusionados</label><input type="text" name="Hilos_Fusionados" class="form-control" placeholder="Azul-Blanco, etc."></div>
+                    <div class="mb-2"><label>Reserva_Buffer</label><input type="text" name="Reserva_Buffer" class="form-control"></div>
+                    <div class="mb-2"><label>Direccionalidad</label><input type="text" name="Direccionalidad" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
+                        <div class="col-6 mb-2"><label>Etiquetado</label><select name="Etiquetado" class="form-select"><option>SI</option><option>NO</option><option>Reemplazado</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Empalme</button>
+                </form>
+            </div>
+
+            <!-- 5. Hilos / Fusiones -->
+            <div class="tab-pane fade" id="tab-hilos" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Hilos</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Hilo">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Registro</label><input type="text" name="ID_Registro" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Cable_Origen</label><input type="text" name="Cable_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Buffer_Origen</label><input type="text" name="Buffer_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Hilo_Origen</label><input type="text" name="Hilo_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Color_Origen</label><input type="text" name="Color_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Cable_Destino</label><input type="text" name="Cable_Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Buffer_Destino</label><input type="text" name="Buffer_Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Hilo_Destino</label><input type="text" name="Hilo_Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Color_Destino</label><input type="text" name="Color_Destino" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Activo</option><option>Libre</option><option>Ocupado</option><option>Dañado</option><option>No fusionado</option><option>Reserva</option></select></div>
+                        <div class="col-6 mb-2"><label>Servicio_Asignado</label><input type="text" name="Servicio_Asignado" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Destino_Final</label><input type="text" name="Destino_Final" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Incidencia</label><input type="text" name="Incidencia" class="form-control"></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Hilo</button>
+                </form>
+            </div>
+
+            <!-- 6. Troncales -->
+            <div class="tab-pane fade" id="tab-troncales" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Troncal</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Troncal">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Cable</label><input type="text" name="ID_Cable" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Tipo_Cable</label><select name="Tipo_Cable" class="form-select"><option>Troncal</option><option>Subtroncal</option><option>Derivacion</option><option>Drop</option></select></div>
+                        <div class="col-6 mb-2"><label>Capacidad_Hilos</label><input type="number" name="Capacidad_Hilos" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Origen</label><input type="text" name="Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Destino</label><input type="text" name="Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Instalacion</label><select name="Tipo_Instalacion" class="form-select"><option>Aereo</option><option>Soterrado</option><option>Mixto</option></select></div>
+                        <div class="col-6 mb-2"><label>Propietario</label><select name="Propietario" class="form-select"><option>Propio</option><option>Tercero</option></select></div>
+                    </div>
+                    <div class="mb-2"><label>Postes_Recorridos</label><input type="text" name="Postes_Recorridos" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Longitud (m)</label><input type="number" name="Longitud_Aprox_m" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Ocupacion</label><input type="text" name="Ocupacion" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Reserva</label><input type="text" name="Reserva" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Vacancia</label><input type="text" name="Vacancia" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Troncal</button>
+                </form>
+            </div>
+
+            <!-- 7. Clientes -->
+            <div class="tab-pane fade" id="tab-clientes" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-primary border-bottom pb-2">Registro de Cliente</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Cliente">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Cliente</label><input type="text" name="ID_Cliente" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label>Nombre_Cliente</label><input type="text" name="Nombre_Cliente" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
+                        <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
+                    <div class="mb-2"><label>Direccion</label><input type="text" name="Direccion" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Puerto_NAP</label><input type="text" name="Puerto_NAP" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Serial_ONT</label><input type="text" name="Serial_ONT" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Marca_ONT</label><input type="text" name="Marca_ONT" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Modelo_ONT</label><input type="text" name="Modelo_ONT" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Estado_Servicio</label><select name="Estado_Servicio" class="form-select"><option>Activo</option><option>Suspendido</option><option>Retirado</option></select></div>
+                    </div>
+                    <div class="mb-2"><label>Fecha_Instalacion</label><input type="date" name="Fecha_Instalacion" class="form-control"></div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Cliente</button>
+                </form>
+            </div>
+
+            <!-- 8. Incidencias -->
+            <div class="tab-pane fade" id="tab-incidencias" role="tabpanel">
+                <form class="card p-3 shadow-sm form-auditoria">
+                    <h5 class="text-danger border-bottom pb-2">Registro de Incidencia</h5>
+                    <input type="hidden" name="Tipo_Elemento" value="Incidencia">
+                    <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
+                    <input type="hidden" name="Auditor" class="auditor-auto">
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>ID_Incidencia</label><input type="text" name="ID_Incidencia" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Fecha</label><input type="date" name="Fecha" class="form-control fecha-incidencia"></div>
+                        <div class="col-6 mb-2"><label>Responsable</label><input type="text" name="Responsable" class="form-control auditor-auto"></div>
+                    </div>
+                    <div class="mb-2"><label>Ubicacion</label><input type="text" name="Ubicacion" class="form-control"></div>
+                    <div class="mb-2"><label>Elemento_Afectado</label><input type="text" name="Elemento_Afectado" class="form-control"></div>
+                    <div class="mb-2"><label>Descripcion</label><textarea name="Descripcion" class="form-control" rows="2"></textarea></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Causa_Probable</label><input type="text" name="Causa_Probable" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Medicion_OTDR</label><input type="text" name="Medicion_OTDR" class="form-control"></div>
+                    </div>
+                    <div class="mb-2"><label>Accion_Propuesta</label><input type="text" name="Accion_Propuesta" class="form-control"></div>
+                    <div class="row">
+                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Abierta</option><option>En proceso</option><option>Cerrada</option></select></div>
+                        <div class="col-6 mb-2"><label>Fecha_Cierre</label><input type="date" name="Fecha_Cierre" class="form-control"></div>
+                    </div>
+                    <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
+                    <button type="submit" class="btn btn-success w-100">💾 Guardar Incidencia</button>
+                </form>
+            </div>
+
+            <!-- 9. RESUMEN DASHBOARD -->
+            <div class="tab-pane fade" id="tab-resumen" role="tabpanel">
+                <div class="card p-3 shadow-sm mb-3 bg-light">
+                    <h5 class="text-success border-bottom pb-2">Estado de Sincronización</h5>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold">Pendientes en el celular:</span>
+                        <span class="badge bg-danger fs-6" id="dash-pendientes-total">0</span>
+                    </div>
+                    <button type="button" class="btn btn-primary w-100 mb-2" onclick="sincronizarDatos()">🔄 Sincronizar Todo</button>
+                    <button type="button" class="btn btn-outline-success w-100" onclick="obtenerResumenNube()">☁️ Actualizar Totales de Google Sheets</button>
+                    <div id="sync-status" class="text-center mt-2 text-muted small"></div>
+                </div>
+
+                <h6 class="text-secondary border-bottom pb-1">Pendientes Locales (Por Subir)</h6>
+                <div class="row g-2 mb-4 text-center">
+                    <div class="col-4"><div class="card p-2"><small>Postes</small><h5 id="pend-postes">0</h5></div></div>
+                    <div class="col-4"><div class="card p-2"><small>NAPs</small><h5 id="pend-naps">0</h5></div></div>
+                    <div class="col-4"><div class="card p-2"><small>Empalmes</small><h5 id="pend-empalmes">0</h5></div></div>
+                </div>
+
+                <h6 class="text-secondary border-bottom pb-1">Totales en Excel (Nube)</h6>
+                <div class="row g-2 text-center">
+                    <div class="col-4"><div class="card p-2 bg-white border-success"><small>Postes</small><h3 class="text-success" id="total-postes">-</h3></div></div>
+                    <div class="col-4"><div class="card p-2 bg-white border-success"><small>NAPs</small><h3 class="text-success" id="total-naps">-</h3></div></div>
+                    <div class="col-4"><div class="card p-2 bg-white border-success"><small>Empalmes</small><h3 class="text-success" id="total-empalmes">-</h3></div></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Flotante -->
+        <div class="card p-3 mt-4 shadow-sm bg-white sticky-bottom mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-0">Pendientes</h6>
+                    <h3 class="mb-0 text-primary" id="contadorPendientes">0</h3>
+                </div>
+                <button type="button" class="btn btn-info text-white px-4" onclick="sincronizarDatos()">🔄 Sincronizar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
