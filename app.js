@@ -113,6 +113,7 @@ async function sincronizarDatos() {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
+            redirect: 'follow', // <-- AÑADE ESTA LÍNEA
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(pendientes)
         });
