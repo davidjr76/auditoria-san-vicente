@@ -470,7 +470,7 @@
                 </div>
             </div>
 
-            <!-- 10. Sectores (Catálogos) -->
+                       <!-- 10. Sectores (Catálogos) -->
             <div class="tab-pane fade" id="tab-sectores" role="tabpanel">
                 <div class="card p-3 shadow-sm mb-3">
                     <h5 class="text-secondary border-bottom pb-2">Agregar Nuevo Sector</h5>
@@ -478,13 +478,12 @@
                         <input type="text" id="nuevo-sector-input" class="form-control" placeholder="Ej: VIÑEDO 1" style="text-transform: uppercase;">
                         <button class="btn btn-primary" type="button" onclick="agregarNuevoSector()">Agregar</button>
                     </div>
-                    <small class="text-muted">Al agregarlo, se actualizará automáticamente en las listas de Postes, NAPs, Empalmes, etc.</small>
+                    <small class="text-muted">Al agregarlo, subirá el contador de pendientes y estará disponible en todas las listas.</small>
                 </div>
                 
                 <div class="card p-3 shadow-sm">
                     <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
                         <h5 class="text-secondary mb-0">Sectores Disponibles</h5>
-                        <button class="btn btn-sm btn-outline-danger" onclick="borrarTodosLosSectores()">🗑️ Borrar Todo</button>
                     </div>
                     <ul id="lista-sectores" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
                         <!-- Se cargan dinámicamente -->
