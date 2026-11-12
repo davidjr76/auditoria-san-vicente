@@ -42,20 +42,32 @@
                     <input type="hidden" name="Fecha_Auditoria" class="fecha-auto">
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
-                        <div class="col-6 mb-2"><label>ID_OLT</label><input type="text" name="ID_OLT" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>ID_OLT</label>
+                            <select name="ID_OLT" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <option value="OLT-VIEJA">OLT-VIEJA</option>
+                                <option value="OLT-NUEVA">OLT-NUEVA</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Estado</label>
+                            <select name="Estado" class="form-select">
+                                <option value="Activa">Activa</option>
+                                <option value="En mantenimiento">En mantenimiento</option>
+                                <option value="Fuera de servicio">Fuera de servicio</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-6 mb-2"><label>Nombre</label><input type="text" name="Nombre" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Marca</label><input type="text" name="Marca" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Ubicación</label><input type="text" name="Ubicacion" class="form-control"></div>
                     </div>
-                    <div class="mb-2"><label>Ubicacion</label><input type="text" name="Ubicacion" class="form-control"></div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
                         <div class="col-6 mb-2"><label>Longitud</label><input type="text" name="Longitud" class="form-control gps-lon" readonly></div>
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
-                    <div class="row">
-                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Activa</option><option>En mantenimiento</option><option>Fuera de servicio</option></select></div>
-                    </div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
                     <button type="submit" class="btn btn-success w-100">💾 Guardar OLT</button>
                 </form>
@@ -70,7 +82,21 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <option value="SECTOR-03">SECTOR-03</option>
+                                <option value="SECTOR-04">SECTOR-04</option>
+                                <option value="SECTOR-05">SECTOR-05</option>
+                                <option value="SECTOR-06">SECTOR-06</option>
+                                <option value="SECTOR-07">SECTOR-07</option>
+                                <option value="SECTOR-08">SECTOR-08</option>
+                                <option value="SECTOR-09">SECTOR-09</option>
+                                <option value="SECTOR-10">SECTOR-10</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
@@ -79,10 +105,37 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Tipo_Poste</label><select name="Tipo_Poste" class="form-select"><option>Concreto</option><option>Madera</option><option>Metalico</option><option>Fibra</option></select></div>
-                        <div class="col-6 mb-2"><label>Propietario</label><select name="Propietario" class="form-select"><option>Propio</option><option>Tercero</option><option>Compartido</option></select></div>
-                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option><option>Inclinado</option></select></div>
-                        <div class="col-6 mb-2"><label>Tiene_Caja</label><select name="Tiene_Caja" class="form-select"><option>NO</option><option>SI</option></select></div>
+                        <div class="col-6 mb-2"><label>Tipo_Poste</label>
+                            <select name="Tipo_Poste" class="form-select">
+                                <option value="Concreto">Concreto</option>
+                                <option value="Madera">Madera</option>
+                                <option value="Metalico">Metalico</option>
+                                <option value="Fibra">Fibra</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Propietario</label>
+                            <select name="Propietario" class="form-select">
+                                <option value="Propio">Propio</option>
+                                <option value="Tercero">Tercero</option>
+                                <option value="Compartido">Compartido</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label>
+                            <select name="Estado_Fisico" class="form-select">
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Dañado">Dañado</option>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Sin tapa">Sin tapa</option>
+                                <option value="Inclinado">Inclinado</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Tiene_Caja</label>
+                            <select name="Tiene_Caja" class="form-select">
+                                <option value="NO">NO</option>
+                                <option value="SI">SI</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3"><label>ID_Caja_Asociada</label><input type="text" name="ID_Caja_Asociada" class="form-control"></div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
@@ -99,7 +152,15 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <option value="SECTOR-03">SECTOR-03</option>
+                                <!-- Agrega hasta el 30 si lo necesitas -->
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
@@ -109,18 +170,53 @@
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Tipo_Caja</label><select name="Tipo_Caja" class="form-select"><option>Aerea</option><option>Subterranea</option><option>Fachada</option></select></div>
+                        <div class="col-6 mb-2"><label>Tipo_Caja</label>
+                            <select name="Tipo_Caja" class="form-select">
+                                <option value="Aerea">Aerea</option>
+                                <option value="Subterranea">Subterranea</option>
+                                <option value="Fachada">Fachada</option>
+                                <option value="Armario">Armario</option>
+                                <option value="Mufa">Mufa</option>
+                                <option value="ODF">ODF</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Splitter_Ratio</label><select name="Splitter_Ratio" class="form-select"><option>1:8</option><option>1:16</option><option>1:4</option></select></div>
+                        <div class="col-6 mb-2"><label>Splitter_Ratio</label>
+                            <select name="Splitter_Ratio" class="form-select">
+                                <option value="1:2">1:2</option>
+                                <option value="1:4">1:4</option>
+                                <option value="1:8">1:8</option>
+                                <option value="1:16">1:16</option>
+                                <option value="1:32">1:32</option>
+                                <option value="1:64">1:64</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Cant_Splitters</label><input type="number" name="Cantidad_Splitters" class="form-control"></div>
                         <div class="col-4 mb-2"><label>Totales</label><input type="number" name="Puertos_Totales" class="form-control"></div>
                         <div class="col-4 mb-2"><label>Libres</label><input type="number" name="Puertos_Libres" class="form-control"></div>
                         <div class="col-4 mb-2"><label>Ocupados</label><input type="number" name="Puertos_Ocupados" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label>
+                            <select name="Estado_Fisico" class="form-select">
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Dañado">Dañado</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Troncal_Alim</label><input type="text" name="Troncal_Alimentacion" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>ID_OLT</label><select name="ID_OLT" class="form-select"><option>OLT-VIEJA</option><option>OLT-NUEVA</option></select></div>
-                        <div class="col-6 mb-2"><label>Etiquetado</label><select name="Etiquetado" class="form-select"><option>SI</option><option>NO</option><option>Reemplazado</option></select></div>
+                        <div class="col-6 mb-2"><label>ID_OLT</label>
+                            <select name="ID_OLT" class="form-select">
+                                <option value="OLT-VIEJA">OLT-VIEJA</option>
+                                <option value="OLT-NUEVA">OLT-NUEVA</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Etiquetado</label>
+                            <select name="Etiquetado" class="form-select">
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="Reemplazado">Reemplazado</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
                     <button type="submit" class="btn btn-success w-100">💾 Guardar NAP</button>
@@ -136,7 +232,14 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control" required></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <!-- Agrega hasta el 30 si lo necesitas -->
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Latitud</label><input type="text" name="Latitud" class="form-control gps-lat" readonly></div>
@@ -145,7 +248,14 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Tipo_Caja</label><input type="text" name="Tipo_Caja" class="form-control" placeholder="Mufa"></div>
+                        <div class="col-6 mb-2"><label>Tipo_Caja</label>
+                            <select name="Tipo_Caja" class="form-select">
+                                <option value="Mufa">Mufa</option>
+                                <option value="NAP">NAP</option>
+                                <option value="Armario">Armario</option>
+                                <option value="ODF">ODF</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Fabricante</label><input type="text" name="Fabricante" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo</label><input type="text" name="Modelo" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Cables_Ingresan</label><input type="text" name="Cables_Ingresan" class="form-control"></div>
@@ -157,8 +267,20 @@
                     <div class="mb-2"><label>Reserva_Buffer</label><input type="text" name="Reserva_Buffer" class="form-control"></div>
                     <div class="mb-2"><label>Direccionalidad</label><input type="text" name="Direccionalidad" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
-                        <div class="col-6 mb-2"><label>Etiquetado</label><select name="Etiquetado" class="form-select"><option>SI</option><option>NO</option><option>Reemplazado</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label>
+                            <select name="Estado_Fisico" class="form-select">
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Dañado">Dañado</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Etiquetado</label>
+                            <select name="Etiquetado" class="form-select">
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="Reemplazado">Reemplazado</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
                     <button type="submit" class="btn btn-success w-100">💾 Guardar Empalme</button>
@@ -178,16 +300,85 @@
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Cable_Origen</label><input type="text" name="Cable_Origen" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Buffer_Origen</label><input type="text" name="Buffer_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Buffer_Origen</label>
+                            <select name="Buffer_Origen" class="form-select">
+                                <option value="AZUL">AZUL</option>
+                                <option value="NARANJA">NARANJA</option>
+                                <option value="VERDE">VERDE</option>
+                                <option value="MARRON">MARRON</option>
+                                <option value="GRIS">GRIS</option>
+                                <option value="BLANCO">BLANCO</option>
+                                <option value="ROJO">ROJO</option>
+                                <option value="NEGRO">NEGRO</option>
+                                <option value="AMARILLO">AMARILLO</option>
+                                <option value="VIOLETA">VIOLETA</option>
+                                <option value="ROSA">ROSA</option>
+                                <option value="AQUA">AQUA</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Hilo_Origen</label><input type="text" name="Hilo_Origen" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Color_Origen</label><input type="text" name="Color_Origen" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Color_Origen</label>
+                            <select name="Color_Origen" class="form-select">
+                                <option value="Azul">Azul</option>
+                                <option value="Naranja">Naranja</option>
+                                <option value="Verde">Verde</option>
+                                <option value="Marron">Marron</option>
+                                <option value="Gris">Gris</option>
+                                <option value="Blanco">Blanco</option>
+                                <option value="Rojo">Rojo</option>
+                                <option value="Negro">Negro</option>
+                                <option value="Amarillo">Amarillo</option>
+                                <option value="Violeta">Violeta</option>
+                                <option value="Rosa">Rosa</option>
+                                <option value="Aqua">Aqua</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Cable_Destino</label><input type="text" name="Cable_Destino" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Buffer_Destino</label><input type="text" name="Buffer_Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Buffer_Destino</label>
+                            <select name="Buffer_Destino" class="form-select">
+                                <option value="AZUL">AZUL</option>
+                                <option value="NARANJA">NARANJA</option>
+                                <option value="VERDE">VERDE</option>
+                                <option value="MARRON">MARRON</option>
+                                <option value="GRIS">GRIS</option>
+                                <option value="BLANCO">BLANCO</option>
+                                <option value="ROJO">ROJO</option>
+                                <option value="NEGRO">NEGRO</option>
+                                <option value="AMARILLO">AMARILLO</option>
+                                <option value="VIOLETA">VIOLETA</option>
+                                <option value="ROSA">ROSA</option>
+                                <option value="AQUA">AQUA</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Hilo_Destino</label><input type="text" name="Hilo_Destino" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Color_Destino</label><input type="text" name="Color_Destino" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>Color_Destino</label>
+                            <select name="Color_Destino" class="form-select">
+                                <option value="Azul">Azul</option>
+                                <option value="Naranja">Naranja</option>
+                                <option value="Verde">Verde</option>
+                                <option value="Marron">Marron</option>
+                                <option value="Gris">Gris</option>
+                                <option value="Blanco">Blanco</option>
+                                <option value="Rojo">Rojo</option>
+                                <option value="Negro">Negro</option>
+                                <option value="Amarillo">Amarillo</option>
+                                <option value="Violeta">Violeta</option>
+                                <option value="Rosa">Rosa</option>
+                                <option value="Aqua">Aqua</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Activo</option><option>Libre</option><option>Ocupado</option><option>Dañado</option><option>No fusionado</option><option>Reserva</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado</label>
+                            <select name="Estado" class="form-select">
+                                <option value="Activo">Activo</option>
+                                <option value="Libre">Libre</option>
+                                <option value="Ocupado">Ocupado</option>
+                                <option value="Dañado">Dañado</option>
+                                <option value="No fusionado">No fusionado</option>
+                                <option value="Reserva">Reserva</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Servicio_Asignado</label><input type="text" name="Servicio_Asignado" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Destino_Final</label><input type="text" name="Destino_Final" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Incidencia</label><input type="text" name="Incidencia" class="form-control"></div>
@@ -206,15 +397,41 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Cable</label><input type="text" name="ID_Cable" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <!-- Agrega hasta el 30 si lo necesitas -->
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Tipo_Cable</label><select name="Tipo_Cable" class="form-select"><option>Troncal</option><option>Subtroncal</option><option>Derivacion</option><option>Drop</option></select></div>
+                        <div class="col-6 mb-2"><label>Tipo_Cable</label>
+                            <select name="Tipo_Cable" class="form-select">
+                                <option value="Troncal">Troncal</option>
+                                <option value="Subtroncal">Subtroncal</option>
+                                <option value="Derivacion">Derivacion</option>
+                                <option value="Drop">Drop</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Capacidad_Hilos</label><input type="number" name="Capacidad_Hilos" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Origen</label><input type="text" name="Origen" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Destino</label><input type="text" name="Destino" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Instalacion</label><select name="Tipo_Instalacion" class="form-select"><option>Aereo</option><option>Soterrado</option><option>Mixto</option></select></div>
-                        <div class="col-6 mb-2"><label>Propietario</label><select name="Propietario" class="form-select"><option>Propio</option><option>Tercero</option></select></div>
+                        <div class="col-6 mb-2"><label>Instalacion</label>
+                            <select name="Tipo_Instalacion" class="form-select">
+                                <option value="Aereo">Aereo</option>
+                                <option value="Soterrado">Soterrado</option>
+                                <option value="Mixto">Mixto</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2"><label>Propietario</label>
+                            <select name="Propietario" class="form-select">
+                                <option value="Propio">Propio</option>
+                                <option value="Tercero">Tercero</option>
+                                <option value="Compartido">Compartido</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-2"><label>Postes_Recorridos</label><input type="text" name="Postes_Recorridos" class="form-control"></div>
                     <div class="row">
@@ -222,7 +439,13 @@
                         <div class="col-6 mb-2"><label>Ocupacion</label><input type="text" name="Ocupacion" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Reserva</label><input type="text" name="Reserva" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Vacancia</label><input type="text" name="Vacancia" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Estado_Fisico</label><select name="Estado_Fisico" class="form-select"><option>Bueno</option><option>Regular</option><option>Dañado</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado_Fisico</label>
+                            <select name="Estado_Fisico" class="form-select">
+                                <option value="Bueno">Bueno</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Dañado">Dañado</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
                     <button type="submit" class="btn btn-success w-100">💾 Guardar Troncal</button>
@@ -238,7 +461,14 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Cliente</label><input type="text" name="ID_Cliente" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <!-- Agrega hasta el 30 si lo necesitas -->
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-2"><label>Nombre_Cliente</label><input type="text" name="Nombre_Cliente" class="form-control"></div>
                     <div class="row">
@@ -253,7 +483,14 @@
                         <div class="col-6 mb-2"><label>Serial_ONT</label><input type="text" name="Serial_ONT" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Marca_ONT</label><input type="text" name="Marca_ONT" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Modelo_ONT</label><input type="text" name="Modelo_ONT" class="form-control"></div>
-                        <div class="col-6 mb-2"><label>Estado_Servicio</label><select name="Estado_Servicio" class="form-select"><option>Activo</option><option>Suspendido</option><option>Retirado</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado_Servicio</label>
+                            <select name="Estado_Servicio" class="form-select">
+                                <option value="Activo">Activo</option>
+                                <option value="Suspendido">Suspendido</option>
+                                <option value="Retirado">Retirado</option>
+                                <option value="En revision">En revision</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-2"><label>Fecha_Instalacion</label><input type="date" name="Fecha_Instalacion" class="form-control"></div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
@@ -270,7 +507,14 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Incidencia</label><input type="text" name="ID_Incidencia" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>SECTOR</label><input type="text" name="SECTOR" class="form-control"></div>
+                        <div class="col-6 mb-2"><label>SECTOR</label>
+                            <select name="SECTOR" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <option value="SECTOR-01">SECTOR-01</option>
+                                <option value="SECTOR-02">SECTOR-02</option>
+                                <!-- Agrega hasta el 30 si lo necesitas -->
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Fecha</label><input type="date" name="Fecha" class="form-control fecha-incidencia"></div>
                         <div class="col-6 mb-2"><label>Responsable</label><input type="text" name="Responsable" class="form-control auditor-auto"></div>
                     </div>
@@ -283,7 +527,14 @@
                     </div>
                     <div class="mb-2"><label>Accion_Propuesta</label><input type="text" name="Accion_Propuesta" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>Estado</label><select name="Estado" class="form-select"><option>Abierta</option><option>En proceso</option><option>Cerrada</option></select></div>
+                        <div class="col-6 mb-2"><label>Estado</label>
+                            <select name="Estado" class="form-select">
+                                <option value="Abierta">Abierta</option>
+                                <option value="En proceso">En proceso</option>
+                                <option value="Cerrada">Cerrada</option>
+                                <option value="Cancelada">Cancelada</option>
+                            </select>
+                        </div>
                         <div class="col-6 mb-2"><label>Fecha_Cierre</label><input type="date" name="Fecha_Cierre" class="form-control"></div>
                     </div>
                     <div class="mb-3"><label>Observaciones</label><textarea name="Observaciones" class="form-control" rows="2"></textarea></div>
