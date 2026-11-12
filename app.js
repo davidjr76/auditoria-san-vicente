@@ -1,4 +1,4 @@
-const API_URL = "AQUI_VA_TU_URL_DE_GOOGLE_SCRIPT";
+const API_URL = "https://script.google.com/macros/s/AKfycbyRHcQnQIpcG4OvYDAHkhmKXV8BFbcFbIZr1hcnu9PnAiIjeFEipb7EHMLbcnxMSzDN/exec";
 
 // ==========================================
 // BASE DE DATOS DE LISTAS
