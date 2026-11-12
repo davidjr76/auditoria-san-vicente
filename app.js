@@ -1,13 +1,10 @@
 const API_URL = "AQUI_VA_TU_URL_DE_GOOGLE_SCRIPT";
 
 // ==========================================
-// BASE DE DATOS DE LISTAS (Tu "1_Catalogos")
+// BASE DE DATOS DE LISTAS
 // ==========================================
 const CATALOGOS = {
-    sectores_base: [
-        "SECTOR-01", "SECTOR-02", "SECTOR-03", "SECTOR-04", "SECTOR-05",
-        "SECTOR-06", "SECTOR-07", "SECTOR-08", "SECTOR-09", "SECTOR-10"
-    ],
+    sectores_base: [], // <--- AQUÍ ESTABA EL ERROR: Lo he dejado vacío para que no salgan los SECTOR-01 al 10
     tiposCaja: ["Aerea", "Subterranea", "Fachada", "Armario", "Mufa", "ODF"],
     colores: ["Azul", "Naranja", "Verde", "Marron", "Gris", "Blanco", "Rojo", "Negro", "Amarillo", "Violeta", "Rosa", "Aqua"],
     buffers: ["AZUL", "NARANJA", "VERDE", "MARRON", "GRIS", "BLANCO", "ROJO", "NEGRO", "AMARILLO", "VIOLETA", "ROSA", "AQUA"]
@@ -45,13 +42,11 @@ function agregarNuevoSector() {
 
     if (nuevoSector === "") return alert("Escribe un nombre para el sector.");
     
-    // Unir sectores base y custom para verificar si ya existe
-    let todos = [...CATALOGOS.sectores_base, ...sectoresCustom];
-    if (todos.includes(nuevoSector)) {
-        return alert("Este sector ya existe.");
+    if (sectoresCustom.includes(nuevoSector)) {
+        return alert("Este sector ya existe en tu lista.");
     }
 
-    // Guardar en el celular
+    // Guardar en la memoria del celular
     sectoresCustom.push(nuevoSector);
     localStorage.setItem('sectores_custom', JSON.stringify(sectoresCustom));
     
@@ -59,28 +54,47 @@ function agregarNuevoSector() {
     input.value = "";
     cargarListasDinamicas();
     renderizarListaSectores();
-    alert(`Sector ${nuevoSector} agregado. Ve a la pestaña Resumen y presiona "Sincronizar" para guardarlo en el Excel.`);
+    
+    // Auto-sincronizar si hay internet
+    if (navigator.onLine) {
+        sincronizarDatos(true); // El 'true' significa que es una sincronización silenciosa
+    }
 }
 
-// 2. MOSTRAR LA LISTA DE SECTORES EN LA PESTAÑA
+// 2. FUNCIÓN PARA BORRAR TODOS LOS SECTORES LOCALES
+function borrarTodosLosSectores() {
+    if(confirm("¿Estás seguro de que quieres borrar todos los sectores de la lista del celular? (No se borrarán del Excel)")) {
+        sectoresCustom = [];
+        localStorage.removeItem('sectores_custom');
+        cargarListasDinamicas();
+        renderizarListaSectores();
+        alert("Lista limpia. Ahora puedes agregar los sectores reales.");
+    }
+}
+
+// 3. MOSTRAR LA LISTA DE SECTORES EN LA PESTAÑA
 function renderizarListaSectores() {
     let ul = document.getElementById('lista-sectores');
     if(!ul) return;
     ul.innerHTML = "";
     
-    let todos = [...CATALOGOS.sectores_base, ...sectoresCustom];
+    let todos = [...new Set([...CATALOGOS.sectores_base, ...sectoresCustom])];
+    
+    if (todos.length === 0) {
+        ul.innerHTML = '<li class="list-group-item text-muted text-center">No hay sectores. Agrega uno arriba.</li>';
+        return;
+    }
+
     todos.forEach(sector => {
-        let esCustom = sectoresCustom.includes(sector);
         ul.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center">
             ${sector}
-            ${esCustom ? '<span class="badge bg-warning text-dark">Nuevo</span>' : ''}
         </li>`;
     });
 }
 
-// 3. FUNCIÓN MÁGICA: Llena los <select> con los datos
+// 4. FUNCIÓN MÁGICA: Llena los <select>
 function cargarListasDinamicas() {
-    let todosLosSectores = [...new Set([...CATALOGOS.sectores_base, ...sectoresCustom])]; // Evita duplicados
+    let todosLosSectores = [...new Set([...CATALOGOS.sectores_base, ...sectoresCustom])];
 
     const selectsSector = document.querySelectorAll('select[name="SECTOR"]');
     selectsSector.forEach(select => {
@@ -89,16 +103,15 @@ function cargarListasDinamicas() {
         todosLosSectores.forEach(sector => {
             select.innerHTML += `<option value="${sector}">${sector}</option>`;
         });
-        select.value = valorActual; // Mantiene la selección si se estaba editando
+        select.value = valorActual;
     });
 
+    // (El resto de listas de colores, buffers y tipos de caja se mantienen igual)
     const selectsTipoCaja = document.querySelectorAll('select[name="Tipo_Caja"]');
     selectsTipoCaja.forEach(select => {
         let valorActual = select.value;
         select.innerHTML = '<option value="">Seleccione...</option>';
-        CATALOGOS.tiposCaja.forEach(caja => {
-            select.innerHTML += `<option value="${caja}">${caja}</option>`;
-        });
+        CATALOGOS.tiposCaja.forEach(caja => { select.innerHTML += `<option value="${caja}">${caja}</option>`; });
         select.value = valorActual;
     });
 
@@ -106,9 +119,7 @@ function cargarListasDinamicas() {
     selectsColor.forEach(select => {
         let valorActual = select.value;
         select.innerHTML = '<option value="">Seleccione...</option>';
-        CATALOGOS.colores.forEach(color => {
-            select.innerHTML += `<option value="${color}">${color}</option>`;
-        });
+        CATALOGOS.colores.forEach(color => { select.innerHTML += `<option value="${color}">${color}</option>`; });
         select.value = valorActual;
     });
 
@@ -116,14 +127,12 @@ function cargarListasDinamicas() {
     selectsBuffer.forEach(select => {
         let valorActual = select.value;
         select.innerHTML = '<option value="">Seleccione...</option>';
-        CATALOGOS.buffers.forEach(buffer => {
-            select.innerHTML += `<option value="${buffer}">${buffer}</option>`;
-        });
+        CATALOGOS.buffers.forEach(buffer => { select.innerHTML += `<option value="${buffer}">${buffer}</option>`; });
         select.value = valorActual;
     });
 }
 
-// 4. CONFIGURAR BOTONES DE GPS
+// 5. CONFIGURAR BOTONES DE GPS
 function configurarBotonesGPS() {
     const botonesGPS = document.querySelectorAll('.btn-gps');
     botonesGPS.forEach(btn => {
@@ -150,16 +159,14 @@ function configurarBotonesGPS() {
     });
 }
 
-// 5. GUARDAR CUALQUIER FORMULARIO
+// 6. GUARDAR CUALQUIER FORMULARIO
 const formularios = document.querySelectorAll('.form-auditoria');
 formularios.forEach(form => {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-
         const formData = new FormData(this);
         const nuevoElemento = {};
         formData.forEach((value, key) => { nuevoElemento[key] = value; });
-        
         nuevoElemento.id_local = Date.now();
         nuevoElemento.fecha_sistema = new Date().toISOString();
 
@@ -180,7 +187,7 @@ formularios.forEach(form => {
     });
 });
 
-// 6. ACTUALIZAR DASHBOARD
+// 7. ACTUALIZAR DASHBOARD
 function actualizarContador() {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     document.getElementById('contadorPendientes').innerText = pendientes.length;
@@ -189,36 +196,36 @@ function actualizarContador() {
 function actualizarDashboard() {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     let counts = { Poste: 0, NAP: 0, Empalme: 0 };
-    pendientes.forEach(item => {
-        if (counts[item.Tipo_Elemento] !== undefined) counts[item.Tipo_Elemento]++;
-    });
+    pendientes.forEach(item => { if (counts[item.Tipo_Elemento] !== undefined) counts[item.Tipo_Elemento]++; });
     document.getElementById('dash-pendientes-total').innerText = pendientes.length;
     document.getElementById('pend-postes').innerText = counts.Poste;
     document.getElementById('pend-naps').innerText = counts.NAP;
     document.getElementById('pend-empalmes').innerText = counts.Empalme;
 }
 
-// 7. SINCRONIZAR CON GOOGLE SHEETS
-async function sincronizarDatos() {
+// 8. SINCRONIZAR CON GOOGLE SHEETS
+async function sincronizarDatos(silencioso = false) {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
-    
-    // Convertir los sectores nuevos en "elementos" para enviarlos
-    let sectoresPendientes = sectoresCustom.map(sec => ({
-        Tipo_Elemento: "Sector",
-        SECTOR: sec,
-        Fecha_Auditoria: new Date().toISOString()
-    }));
+    let sectoresPendientes = sectoresCustom.map(sec => ({ Tipo_Elemento: "Sector", SECTOR: sec }));
 
     let todoParaEnviar = [...pendientes, ...sectoresPendientes];
 
-    if (todoParaEnviar.length === 0) return alert("No hay datos nuevos para sincronizar.");
-    if (!navigator.onLine) return alert("No hay internet.");
+    if (todoParaEnviar.length === 0) {
+        if(!silencioso) alert("No hay datos nuevos para sincronizar.");
+        return;
+    }
+    if (!navigator.onLine) {
+        if(!silencioso) alert("No hay internet.");
+        return;
+    }
 
     const btn = document.querySelector('.btn-info');
     const btnDash = document.querySelector('button[onclick="sincronizarDatos()"]');
-    btn.innerText = "⏳ Sincronizando...";
-    if(btnDash) btnDash.innerText = "⏳ Sincronizando...";
-    btn.disabled = true;
+    if(!silencioso) {
+        btn.innerText = "⏳ Sincronizando...";
+        if(btnDash) btnDash.innerText = "⏳ Sincronizando...";
+        btn.disabled = true;
+    }
 
     try {
         const response = await fetch(API_URL, {
@@ -229,34 +236,33 @@ async function sincronizarDatos() {
         });
 
         if (response.ok) {
-            alert("¡Sincronización exitosa con el Excel!");
+            if(!silencioso) alert("¡Sincronización exitosa con el Excel!");
             localStorage.removeItem('pendientesGPON');
-            
-            // Limpiamos los sectores custom porque ya están en el Excel (opcional)
-            // sectoresCustom = []; localStorage.removeItem('sectores_custom'); 
-            
             actualizarContador();
             actualizarDashboard();
-            document.getElementById('sync-status').innerText = "Última sinc: " + new Date().toLocaleTimeString();
+            if(document.getElementById('sync-status')) {
+                document.getElementById('sync-status').innerText = "Última sinc: " + new Date().toLocaleTimeString();
+            }
             obtenerResumenNube(); 
         } else {
-            alert("Error del servidor. Verifica los permisos en Apps Script.");
+            if(!silencioso) alert("Error del servidor. Revisa los permisos en Apps Script.");
         }
     } catch (error) {
-        alert("Error de red al sincronizar.");
+        if(!silencioso) alert("Error de red al sincronizar.");
     } finally {
-        btn.innerText = "🔄 Sincronizar";
-        if(btnDash) btnDash.innerText = "🔄 Sincronizar Todo";
-        btn.disabled = false;
+        if(!silencioso) {
+            btn.innerText = "🔄 Sincronizar";
+            if(btnDash) btnDash.innerText = "🔄 Sincronizar Todo";
+            btn.disabled = false;
+        }
     }
 }
 
-// 8. OBTENER TOTALES DE LA NUBE
+// 9. OBTENER TOTALES DE LA NUBE
 async function obtenerResumenNube() {
-    if (!navigator.onLine) return alert("Necesitas internet para ver los totales.");
+    if (!navigator.onLine) return;
     const btn = document.querySelector('button[onclick="obtenerResumenNube()"]');
-    btn.innerText = "⏳ Cargando...";
-    btn.disabled = true;
+    if(btn) { btn.innerText = "⏳ Cargando..."; btn.disabled = true; }
 
     try {
         const response = await fetch(API_URL); 
@@ -267,10 +273,9 @@ async function obtenerResumenNube() {
             document.getElementById('total-empalmes').innerText = data.totales.empalmes;
         }
     } catch (error) {
-        alert("Error al leer totales.");
+        console.error(error);
     } finally {
-        btn.innerText = "☁️ Actualizar Totales de Google Sheets";
-        btn.disabled = false;
+        if(btn) { btn.innerText = "☁️ Actualizar Totales de Google Sheets"; btn.disabled = false; }
     }
 }
 
