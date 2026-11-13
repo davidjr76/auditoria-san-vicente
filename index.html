@@ -9,7 +9,6 @@
 </head>
 <body class="bg-light">
 
-    <!-- Barra Superior -->
     <nav class="navbar navbar-dark bg-primary sticky-top shadow-sm">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">Auditoría San Vicente</span>
@@ -17,7 +16,6 @@
         </div>
     </nav>
 
-    <!-- Menú Deslizable con las 10 Pestañas -->
     <div class="bg-white shadow-sm sticky-top" style="top: 56px; z-index: 1000;">
         <ul class="nav nav-pills flex-nowrap overflow-auto p-2" id="pills-tab" role="tablist" style="scrollbar-width: none;">
             <li class="nav-item"><button class="nav-link active text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-olts">OLTs</button></li>
@@ -153,7 +151,10 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>ID_Poste</label><input type="text" name="ID_Poste" class="form-control"></div>
+                        <!-- Relación: Este poste viene de la lista de Postes guardados -->
+                        <div class="col-6 mb-2"><label>ID_Poste (Asociado)</label>
+                            <select name="ID_Poste" class="form-select rel-postes"></select>
+                        </div>
                         <div class="col-6 mb-2"><label>Tipo_Caja</label>
                             <select name="Tipo_Caja" class="form-select"></select>
                         </div>
@@ -180,7 +181,10 @@
                                 <option value="Dañado">Dañado</option>
                             </select>
                         </div>
-                        <div class="col-6 mb-2"><label>Troncal_Alim</label><input type="text" name="Troncal_Alimentacion" class="form-control"></div>
+                        <!-- Relación: Esta troncal viene de la lista de Troncales guardados -->
+                        <div class="col-6 mb-2"><label>Troncal_Alim</label>
+                            <select name="Troncal_Alimentacion" class="form-select rel-troncales"></select>
+                        </div>
                         <div class="col-6 mb-2"><label>ID_OLT</label>
                             <select name="ID_OLT" class="form-select">
                                 <option value="OLT-VIEJA">OLT-VIEJA</option>
@@ -263,7 +267,10 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Registro</label><input type="text" name="ID_Registro" class="form-control" required></div>
-                        <div class="col-6 mb-2"><label>ID_Empalme</label><input type="text" name="ID_Empalme" class="form-control"></div>
+                        <!-- Relación: Este empalme viene de la lista de Empalmes guardados -->
+                        <div class="col-6 mb-2"><label>ID_Empalme</label>
+                            <select name="ID_Empalme" class="form-select rel-empalmes"></select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-6 mb-2"><label>Cable_Origen</label><input type="text" name="Cable_Origen" class="form-control"></div>
@@ -383,7 +390,10 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion</label><input type="text" name="Direccion" class="form-control"></div>
                     <div class="row">
-                        <div class="col-6 mb-2"><label>ID_NAP</label><input type="text" name="ID_NAP" class="form-control"></div>
+                        <!-- Relación: Esta NAP viene de la lista de NAPs guardadas -->
+                        <div class="col-6 mb-2"><label>ID_NAP</label>
+                            <select name="ID_NAP" class="form-select rel-naps"></select>
+                        </div>
                         <div class="col-6 mb-2"><label>Puerto_NAP</label><input type="text" name="Puerto_NAP" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Serial_ONT</label><input type="text" name="Serial_ONT" class="form-control"></div>
                         <div class="col-6 mb-2"><label>Marca_ONT</label><input type="text" name="Marca_ONT" class="form-control"></div>
@@ -470,7 +480,7 @@
                 </div>
             </div>
 
-                                   <!-- 10. Sectores (Catálogos) -->
+            <!-- 10. Sectores (Catálogos) -->
             <div class="tab-pane fade" id="tab-sectores" role="tabpanel">
                 <div class="card p-3 shadow-sm mb-3">
                     <h5 class="text-secondary border-bottom pb-2" id="titulo-form-sector">Agregar Nuevo Sector</h5>
