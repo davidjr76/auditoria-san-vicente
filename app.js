@@ -375,7 +375,7 @@ async function obtenerResumenNube() {
     if (!navigator.onLine) return alert("Necesitas internet para descargar datos del Excel.");
     
     const btn = document.querySelector('button[onclick="obtenerResumenNube()"]');
-    if(btn) { btn.innerText = "⏳ Descargando IDs..."; btn.disabled = true; }
+    if(btn) { btn.innerText = "⏳ Descargando Datos..."; btn.disabled = true; }
     
     try {
         const urlConCacheBuster = API_URL + "?t=" + new Date().getTime();
@@ -386,11 +386,19 @@ async function obtenerResumenNube() {
         const data = await response.json();
         
         if (data.status === "success") {
+            // 1. Actualizar totales
             document.getElementById('total-postes').innerText = data.totales.postes;
             document.getElementById('total-naps').innerText = data.totales.naps;
             document.getElementById('total-empalmes').innerText = data.totales.empalmes;
 
             if (data.listas) {
+                // 2. Descargar Sectores
+                let sectoresLocales = JSON.parse(localStorage.getItem('sectores_custom')) || [];
+                let sectoresFinales = [...new Set([...sectoresLocales, ...data.listas.sectores])];
+                localStorage.setItem('sectores_custom', JSON.stringify(sectoresFinales));
+                sectoresCustom = sectoresFinales;
+
+                // 3. Descargar IDs (Postes, NAPs, etc.)
                 let postesLocales = JSON.parse(localStorage.getItem('db_postes')) || [];
                 let napsLocales = JSON.parse(localStorage.getItem('db_naps')) || [];
                 let empalmesLocales = JSON.parse(localStorage.getItem('db_empalmes')) || [];
@@ -415,8 +423,12 @@ async function obtenerResumenNube() {
                 db_troncales = troncalesFinales;
                 db_clientes = clientesFinales;
 
+                // 4. Refrescar la pantalla
+                renderizarListaSectores();
+                cargarListasDinamicas();
                 actualizarRelaciones();
-                alert(`✅ ¡Éxito! Se descargaron:\n- ${data.listas.postes.length} Postes\n- ${data.listas.naps.length} NAPs\n- ${data.listas.empalmes.length} Empalmes`);
+                
+                alert(`✅ ¡Datos recuperados con éxito!\n\nSe descargaron:\n- ${data.listas.sectores.length} Sectores\n- ${data.listas.postes.length} Postes\n- ${data.listas.naps.length} NAPs`);
             } else {
                 alert("⚠️ Google respondió, pero no envió las listas. Revisa el código de Apps Script.");
             }
