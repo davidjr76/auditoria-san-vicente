@@ -26,6 +26,8 @@
             <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-troncales">Troncales</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-clientes">Clientes</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap" data-bs-toggle="pill" data-bs-target="#tab-incidencias">Incidencias</button></li>
+            <!-- NUEVA PESTAÑA DE REVISIÓN -->
+            <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-warning" data-bs-toggle="pill" data-bs-target="#tab-revisar">📝 Revisar</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-success" data-bs-toggle="pill" data-bs-target="#tab-resumen">📊 Resumen</button></li>
             <li class="nav-item"><button class="nav-link text-nowrap fw-bold text-secondary" data-bs-toggle="pill" data-bs-target="#tab-sectores">⚙️ Sectores</button></li>
         </ul>
@@ -448,7 +450,18 @@
                 </form>
             </div>
 
-            <!-- 9. RESUMEN DASHBOARD -->
+            <!-- 9. REVISAR PENDIENTES -->
+            <div class="tab-pane fade" id="tab-revisar" role="tabpanel">
+                <div class="card p-3 shadow-sm">
+                    <h5 class="text-warning border-bottom pb-2">Revisar Antes de Sincronizar</h5>
+                    <p class="text-muted small">Aquí puedes ver todo lo que has guardado en el teléfono. Si hay un error, puedes eliminarlo antes de que vaya al Excel.</p>
+                    <ul id="lista-pendientes" class="list-group list-group-flush" style="max-height: 400px; overflow-y: auto;">
+                        <!-- Se cargan dinámicamente -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 10. RESUMEN DASHBOARD -->
             <div class="tab-pane fade" id="tab-resumen" role="tabpanel">
                 <div class="card p-3 shadow-sm mb-3 bg-light">
                     <h5 class="text-success border-bottom pb-2">Estado de Sincronización</h5>
@@ -457,8 +470,8 @@
                         <span class="badge bg-danger fs-6" id="dash-pendientes-total">0</span>
                     </div>
                     
-                    <button type="button" class="btn btn-warning text-dark w-100 fw-bold mb-2" onclick="obtenerResumenNube()">⬇️ Descargar IDs Existentes del Excel</button>
-                    <button type="button" class="btn btn-primary w-100 mb-2" onclick="sincronizarDatos()">🔄 Sincronizar Todo</button>
+                    <button type="button" class="btn btn-warning text-dark w-100 fw-bold mb-2" onclick="obtenerResumenNube()">⬇️ Descargar Datos del Excel</button>
+                    <button type="button" class="btn btn-primary w-100 mb-2" onclick="sincronizarDatos()">🔄 Sincronizar Todo al Excel</button>
                     
                     <div id="sync-status" class="text-center mt-2 text-muted small"></div>
                 </div>
@@ -478,7 +491,7 @@
                 </div>
             </div>
 
-            <!-- 10. Sectores (Catálogos) -->
+            <!-- 11. Sectores -->
             <div class="tab-pane fade" id="tab-sectores" role="tabpanel">
                 <div class="card p-3 shadow-sm mb-3">
                     <h5 class="text-secondary border-bottom pb-2" id="titulo-form-sector">Agregar Nuevo Sector</h5>
