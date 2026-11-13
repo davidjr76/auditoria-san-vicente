@@ -1,4 +1,4 @@
-const API_URL = "AQUI_VA_TU_URL_DE_GOOGLE_SCRIPT";
+const API_URL = "https://script.google.com/macros/s/AKfycbyRHcQnQIpcG4OvYDAHkhmKXV8BFbcFbIZr1hcnu9PnAiIjeFEipb7EHMLbcnxMSzDN/exec";
 
 const CATALOGOS = {
     tiposCaja: ["Aerea", "Subterranea", "Fachada", "Armario", "Mufa", "ODF"],
@@ -6,14 +6,14 @@ const CATALOGOS = {
     buffers: ["AZUL", "NARANJA", "VERDE", "MARRON", "GRIS", "BLANCO", "ROJO", "NEGRO", "AMARILLO", "VIOLETA", "ROSA", "AQUA"]
 };
 
-// Variables de estado para Sectores
+// Memoria de Sectores
 let sectoresCustom = JSON.parse(localStorage.getItem('sectores_custom')) || [];
 let sectoresPendientes = JSON.parse(localStorage.getItem('sectores_pendientes')) || [];
 let sectoresEditados = JSON.parse(localStorage.getItem('sectores_editados')) || [];
 let sectoresEliminados = JSON.parse(localStorage.getItem('sectores_eliminados')) || [];
 let sectorEditando = null;
 
-// BASES DE DATOS LOCALES PARA RELACIONES (Para no repetir IDs)
+// Memoria de IDs (Bases de datos locales)
 let db_postes = JSON.parse(localStorage.getItem('db_postes')) || [];
 let db_naps = JSON.parse(localStorage.getItem('db_naps')) || [];
 let db_empalmes = JSON.parse(localStorage.getItem('db_empalmes')) || [];
@@ -44,10 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// RELACIONES (Vincular IDs)
+// VINCULACIÓN DE IDS
 // ==========================================
 function actualizarRelaciones() {
-    // Rellenar select de ID_Poste en NAPs
     document.querySelectorAll('.rel-postes').forEach(sel => {
         let v = sel.value;
         sel.innerHTML = '<option value="">Seleccione...</option>';
@@ -55,7 +54,6 @@ function actualizarRelaciones() {
         sel.value = v;
     });
 
-    // Rellenar select de ID_NAP en Clientes
     document.querySelectorAll('.rel-naps').forEach(sel => {
         let v = sel.value;
         sel.innerHTML = '<option value="">Seleccione...</option>';
@@ -63,7 +61,6 @@ function actualizarRelaciones() {
         sel.value = v;
     });
 
-    // Rellenar select de ID_Empalme en Hilos
     document.querySelectorAll('.rel-empalmes').forEach(sel => {
         let v = sel.value;
         sel.innerHTML = '<option value="">Seleccione...</option>';
@@ -71,7 +68,6 @@ function actualizarRelaciones() {
         sel.value = v;
     });
 
-    // Rellenar select de Troncal_Alimentacion en NAPs
     document.querySelectorAll('.rel-troncales').forEach(sel => {
         let v = sel.value;
         sel.innerHTML = '<option value="">Seleccione...</option>';
@@ -81,7 +77,7 @@ function actualizarRelaciones() {
 }
 
 // ==========================================
-// GUARDAR FORMULARIOS CON VALIDACIÓN
+// GUARDAR FORMULARIOS Y VALIDAR DUPLICADOS
 // ==========================================
 document.querySelectorAll('.form-auditoria').forEach(form => {
     form.addEventListener('submit', function(e) {
@@ -94,7 +90,6 @@ document.querySelectorAll('.form-auditoria').forEach(form => {
         let isDuplicate = false;
         let msgError = "";
 
-        // Validar duplicados según el tipo
         if (nuevoElemento.Tipo_Elemento === 'Poste') {
             if (db_postes.includes(nuevoElemento.ID_Poste)) { isDuplicate = true; msgError = "Este ID_Poste ya existe."; }
         } else if (nuevoElemento.Tipo_Elemento === 'NAP') {
@@ -108,17 +103,16 @@ document.querySelectorAll('.form-auditoria').forEach(form => {
         }
 
         if (isDuplicate) {
-            return alert(`⚠️ ERROR: ${msgError}\n\nPor favor, usa un ID diferente o edita el existente.`);
+            return alert(`⚠️ ERROR: ${msgError}\n\nPor favor, usa un ID diferente.`);
         }
 
-        // Si no es duplicado, guardar en las bases locales para futuras relaciones
+        // Guardar en bases de datos locales
         if (nuevoElemento.Tipo_Elemento === 'Poste') { db_postes.push(nuevoElemento.ID_Poste); localStorage.setItem('db_postes', JSON.stringify(db_postes)); }
         if (nuevoElemento.Tipo_Elemento === 'NAP') { db_naps.push(nuevoElemento.ID_NAP); localStorage.setItem('db_naps', JSON.stringify(db_naps)); }
         if (nuevoElemento.Tipo_Elemento === 'Empalme') { db_empalmes.push(nuevoElemento.ID_Empalme); localStorage.setItem('db_empalmes', JSON.stringify(db_empalmes)); }
         if (nuevoElemento.Tipo_Elemento === 'Troncal') { db_troncales.push(nuevoElemento.ID_Cable); localStorage.setItem('db_troncales', JSON.stringify(db_troncales)); }
         if (nuevoElemento.Tipo_Elemento === 'Cliente') { db_clientes.push(nuevoElemento.ID_Cliente); localStorage.setItem('db_clientes', JSON.stringify(db_clientes)); }
 
-        // Guardar en la cola de sincronización normal
         nuevoElemento.id_local = Date.now();
         let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
         pendientes.push(nuevoElemento);
@@ -127,13 +121,11 @@ document.querySelectorAll('.form-auditoria').forEach(form => {
         alert(`¡${nuevoElemento.Tipo_Elemento} guardado correctamente!`);
         this.reset();
         
-        // Restaurar valores por defecto
         let hoy = new Date().toISOString().split('T')[0];
         this.querySelectorAll('.fecha-auto').forEach(el => el.value = hoy);
         this.querySelectorAll('.auditor-auto').forEach(el => el.value = localStorage.getItem('auditor_nombre'));
         this.querySelectorAll('.fecha-incidencia').forEach(el => el.value = hoy);
 
-        // Actualizar las listas desplegables para incluir el nuevo ID
         actualizarRelaciones();
         actualizarContador();
         actualizarDashboard();
@@ -141,7 +133,7 @@ document.querySelectorAll('.form-auditoria').forEach(form => {
 });
 
 // ==========================================
-// GESTIÓN DE SECTORES Y LISTAS
+// SECTORES (CRUD)
 // ==========================================
 function guardarSector() {
     let input = document.getElementById('nuevo-sector-input');
@@ -189,7 +181,7 @@ function cancelarEdicion() {
 }
 
 function eliminarSector(sector) {
-    if(confirm(`¿Seguro que deseas eliminar el sector "${sector}"?\n\nAl sincronizar, también se borrará del Excel.`)) {
+    if(confirm(`¿Seguro que deseas eliminar el sector "${sector}"?\n\nAl sincronizar, se borrará del Excel.`)) {
         sectoresCustom = sectoresCustom.filter(s => s !== sector);
         sectoresPendientes = sectoresPendientes.filter(s => s !== sector);
         sectoresEliminados.push(sector);
@@ -234,6 +226,9 @@ function renderizarListaSectores() {
     });
 }
 
+// ==========================================
+// LISTAS Y GPS
+// ==========================================
 function cargarListasDinamicas() {
     let todosLosSectores = [...sectoresCustom];
     document.querySelectorAll('select[name="SECTOR"]').forEach(select => {
@@ -280,7 +275,7 @@ function configurarBotonesGPS() {
 }
 
 // ==========================================
-// CONTADORES Y SINCRONIZACIÓN
+// CONTADORES
 // ==========================================
 function actualizarContador() {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
@@ -300,6 +295,9 @@ function actualizarDashboard() {
     document.getElementById('pend-empalmes').innerText = counts.Empalme;
 }
 
+// ==========================================
+// SINCRONIZAR Y DESCARGAR
+// ==========================================
 async function sincronizarDatos(silencioso = false) {
     let pendientesForm = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     
@@ -380,18 +378,19 @@ async function obtenerResumenNube() {
     if(btn) { btn.innerText = "⏳ Descargando IDs..."; btn.disabled = true; }
     
     try {
-        const response = await fetch(API_URL); 
+        const urlConCacheBuster = API_URL + "?t=" + new Date().getTime();
+        const response = await fetch(urlConCacheBuster); 
+        
+        if (!response.ok) throw new Error("Error HTTP " + response.status);
+
         const data = await response.json();
         
         if (data.status === "success") {
-            // 1. Actualizar totales visuales
             document.getElementById('total-postes').innerText = data.totales.postes;
             document.getElementById('total-naps').innerText = data.totales.naps;
             document.getElementById('total-empalmes').innerText = data.totales.empalmes;
 
-            // 2. GUARDAR LAS LISTAS EN LA MEMORIA DEL CELULAR
             if (data.listas) {
-                // Unir lo que ya hay en memoria con lo que viene del Excel (para no borrar lo nuevo sin sincronizar)
                 let postesLocales = JSON.parse(localStorage.getItem('db_postes')) || [];
                 let napsLocales = JSON.parse(localStorage.getItem('db_naps')) || [];
                 let empalmesLocales = JSON.parse(localStorage.getItem('db_empalmes')) || [];
@@ -410,23 +409,22 @@ async function obtenerResumenNube() {
                 localStorage.setItem('db_troncales', JSON.stringify(troncalesFinales));
                 localStorage.setItem('db_clientes', JSON.stringify(clientesFinales));
 
-                // 3. Actualizar las variables globales en la App
                 db_postes = postesFinales;
                 db_naps = napsFinales;
                 db_empalmes = empalmesFinales;
                 db_troncales = troncalesFinales;
                 db_clientes = clientesFinales;
 
-                // 4. Refrescar las listas desplegables
                 actualizarRelaciones();
-                
-                alert("✅ IDs existentes descargados. Ahora puedes usar las listas desplegables con tus datos ya guardados.");
+                alert(`✅ ¡Éxito! Se descargaron:\n- ${data.listas.postes.length} Postes\n- ${data.listas.naps.length} NAPs\n- ${data.listas.empalmes.length} Empalmes`);
+            } else {
+                alert("⚠️ Google respondió, pero no envió las listas. Revisa el código de Apps Script.");
             }
         }
     } catch (error) {
-        alert("Error al conectar con el servidor: " + error.message);
+        alert("❌ Error al conectar: " + error.message);
     } finally {
-        if(btn) { btn.innerText = "☁️ Descargar IDs Existentes del Excel"; btn.disabled = false; }
+        if(btn) { btn.innerText = "⬇️ Descargar IDs Existentes del Excel"; btn.disabled = false; }
     }
 }
 
