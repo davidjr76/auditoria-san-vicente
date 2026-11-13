@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyRHcQnQIpcG4OvYDAHkhmKXV8BFbcFbIZr1hcnu9PnAiIjeFEipb7EHMLbcnxMSzDN/exec";
+const API_URL = "AQUI_VA_TU_URL_DE_GOOGLE_SCRIPT";
 
 const CATALOGOS = {
     tiposCaja: ["Aerea", "Subterranea", "Fachada", "Armario", "Mufa", "ODF"],
@@ -6,16 +6,24 @@ const CATALOGOS = {
     buffers: ["AZUL", "NARANJA", "VERDE", "MARRON", "GRIS", "BLANCO", "ROJO", "NEGRO", "AMARILLO", "VIOLETA", "ROSA", "AQUA"]
 };
 
-// Variables de estado
+// Variables de estado para Sectores
 let sectoresCustom = JSON.parse(localStorage.getItem('sectores_custom')) || [];
-let sectoresPendientes = JSON.parse(localStorage.getItem('sectores_pendientes')) || []; // Para nuevos
-let sectoresEditados = JSON.parse(localStorage.getItem('sectores_editados')) || []; // Para cambios de nombre {viejo, nuevo}
-let sectoresEliminados = JSON.parse(localStorage.getItem('sectores_eliminados')) || []; // Para borrar en Excel
-let sectorEditando = null; // Guarda el nombre original si estamos editando
+let sectoresPendientes = JSON.parse(localStorage.getItem('sectores_pendientes')) || [];
+let sectoresEditados = JSON.parse(localStorage.getItem('sectores_editados')) || [];
+let sectoresEliminados = JSON.parse(localStorage.getItem('sectores_eliminados')) || [];
+let sectorEditando = null;
+
+// BASES DE DATOS LOCALES PARA RELACIONES (Para no repetir IDs)
+let db_postes = JSON.parse(localStorage.getItem('db_postes')) || [];
+let db_naps = JSON.parse(localStorage.getItem('db_naps')) || [];
+let db_empalmes = JSON.parse(localStorage.getItem('db_empalmes')) || [];
+let db_troncales = JSON.parse(localStorage.getItem('db_troncales')) || [];
+let db_clientes = JSON.parse(localStorage.getItem('db_clientes')) || [];
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarListasDinamicas();
     renderizarListaSectores();
+    actualizarRelaciones();
 
     let auditorGuardado = localStorage.getItem('auditor_nombre');
     if (!auditorGuardado) {
@@ -36,9 +44,105 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// GESTIÓN DE SECTORES
+// RELACIONES (Vincular IDs)
 // ==========================================
+function actualizarRelaciones() {
+    // Rellenar select de ID_Poste en NAPs
+    document.querySelectorAll('.rel-postes').forEach(sel => {
+        let v = sel.value;
+        sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_postes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
+        sel.value = v;
+    });
 
+    // Rellenar select de ID_NAP en Clientes
+    document.querySelectorAll('.rel-naps').forEach(sel => {
+        let v = sel.value;
+        sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_naps.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
+        sel.value = v;
+    });
+
+    // Rellenar select de ID_Empalme en Hilos
+    document.querySelectorAll('.rel-empalmes').forEach(sel => {
+        let v = sel.value;
+        sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_empalmes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
+        sel.value = v;
+    });
+
+    // Rellenar select de Troncal_Alimentacion en NAPs
+    document.querySelectorAll('.rel-troncales').forEach(sel => {
+        let v = sel.value;
+        sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_troncales.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
+        sel.value = v;
+    });
+}
+
+// ==========================================
+// GUARDAR FORMULARIOS CON VALIDACIÓN
+// ==========================================
+document.querySelectorAll('.form-auditoria').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const nuevoElemento = {};
+        formData.forEach((value, key) => { nuevoElemento[key] = value; });
+        
+        let isDuplicate = false;
+        let msgError = "";
+
+        // Validar duplicados según el tipo
+        if (nuevoElemento.Tipo_Elemento === 'Poste') {
+            if (db_postes.includes(nuevoElemento.ID_Poste)) { isDuplicate = true; msgError = "Este ID_Poste ya existe."; }
+        } else if (nuevoElemento.Tipo_Elemento === 'NAP') {
+            if (db_naps.includes(nuevoElemento.ID_NAP)) { isDuplicate = true; msgError = "Este ID_NAP ya existe."; }
+        } else if (nuevoElemento.Tipo_Elemento === 'Empalme') {
+            if (db_empalmes.includes(nuevoElemento.ID_Empalme)) { isDuplicate = true; msgError = "Este ID_Empalme ya existe."; }
+        } else if (nuevoElemento.Tipo_Elemento === 'Troncal') {
+            if (db_troncales.includes(nuevoElemento.ID_Cable)) { isDuplicate = true; msgError = "Este ID_Cable ya existe."; }
+        } else if (nuevoElemento.Tipo_Elemento === 'Cliente') {
+            if (db_clientes.includes(nuevoElemento.ID_Cliente)) { isDuplicate = true; msgError = "Este ID_Cliente ya existe."; }
+        }
+
+        if (isDuplicate) {
+            return alert(`⚠️ ERROR: ${msgError}\n\nPor favor, usa un ID diferente o edita el existente.`);
+        }
+
+        // Si no es duplicado, guardar en las bases locales para futuras relaciones
+        if (nuevoElemento.Tipo_Elemento === 'Poste') { db_postes.push(nuevoElemento.ID_Poste); localStorage.setItem('db_postes', JSON.stringify(db_postes)); }
+        if (nuevoElemento.Tipo_Elemento === 'NAP') { db_naps.push(nuevoElemento.ID_NAP); localStorage.setItem('db_naps', JSON.stringify(db_naps)); }
+        if (nuevoElemento.Tipo_Elemento === 'Empalme') { db_empalmes.push(nuevoElemento.ID_Empalme); localStorage.setItem('db_empalmes', JSON.stringify(db_empalmes)); }
+        if (nuevoElemento.Tipo_Elemento === 'Troncal') { db_troncales.push(nuevoElemento.ID_Cable); localStorage.setItem('db_troncales', JSON.stringify(db_troncales)); }
+        if (nuevoElemento.Tipo_Elemento === 'Cliente') { db_clientes.push(nuevoElemento.ID_Cliente); localStorage.setItem('db_clientes', JSON.stringify(db_clientes)); }
+
+        // Guardar en la cola de sincronización normal
+        nuevoElemento.id_local = Date.now();
+        let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
+        pendientes.push(nuevoElemento);
+        localStorage.setItem('pendientesGPON', JSON.stringify(pendientes));
+
+        alert(`¡${nuevoElemento.Tipo_Elemento} guardado correctamente!`);
+        this.reset();
+        
+        // Restaurar valores por defecto
+        let hoy = new Date().toISOString().split('T')[0];
+        this.querySelectorAll('.fecha-auto').forEach(el => el.value = hoy);
+        this.querySelectorAll('.auditor-auto').forEach(el => el.value = localStorage.getItem('auditor_nombre'));
+        this.querySelectorAll('.fecha-incidencia').forEach(el => el.value = hoy);
+
+        // Actualizar las listas desplegables para incluir el nuevo ID
+        actualizarRelaciones();
+        actualizarContador();
+        actualizarDashboard();
+    });
+});
+
+// ==========================================
+// GESTIÓN DE SECTORES Y LISTAS
+// ==========================================
 function guardarSector() {
     let input = document.getElementById('nuevo-sector-input');
     let nombreSector = input.value.trim().toUpperCase();
@@ -46,25 +150,15 @@ function guardarSector() {
     if (nombreSector === "") return alert("Escribe un nombre para el sector.");
 
     if (sectorEditando) {
-        // ESTAMOS EDITANDO
-        if (nombreSector !== sectorEditando && sectoresCustom.includes(nombreSector)) {
-            return alert("Ya existe otro sector con ese nombre.");
-        }
-        
-        // Actualizar en la lista local
+        if (nombreSector !== sectorEditando && sectoresCustom.includes(nombreSector)) return alert("Ya existe otro sector con ese nombre.");
         let index = sectoresCustom.indexOf(sectorEditando);
         sectoresCustom[index] = nombreSector;
-        
-        // Registrar en la cola de edición para el Excel
         sectoresEditados.push({ viejo: sectorEditando, nuevo: nombreSector });
-        
-        cancelarEdicion(); // Restaurar el formulario
+        cancelarEdicion();
     } else {
-        // ESTAMOS CREANDO
         if (sectoresCustom.includes(nombreSector)) return alert("Este sector ya existe.");
-
         sectoresCustom.push(nombreSector);
-        sectoresPendientes.push(nombreSector); // Agregar a la cola de nuevos
+        sectoresPendientes.push(nombreSector);
         input.value = "";
     }
 
@@ -96,15 +190,9 @@ function cancelarEdicion() {
 
 function eliminarSector(sector) {
     if(confirm(`¿Seguro que deseas eliminar el sector "${sector}"?\n\nAl sincronizar, también se borrará del Excel.`)) {
-        // Borrar de la lista local
         sectoresCustom = sectoresCustom.filter(s => s !== sector);
-        
-        // Si estaba pendiente de crearse, lo sacamos de la cola
         sectoresPendientes = sectoresPendientes.filter(s => s !== sector);
-        
-        // Agregar a la cola de eliminación para Excel
         sectoresEliminados.push(sector);
-
         guardarEnMemoria();
         renderizarListaSectores();
         cargarListasDinamicas();
@@ -146,13 +234,8 @@ function renderizarListaSectores() {
     });
 }
 
-// ==========================================
-// RESTO DE LA APP (Listas, GPS, Guardar, Sincronizar)
-// ==========================================
-
 function cargarListasDinamicas() {
     let todosLosSectores = [...sectoresCustom];
-
     document.querySelectorAll('select[name="SECTOR"]').forEach(select => {
         let valorActual = select.value;
         select.innerHTML = '<option value="">Seleccione...</option>'; 
@@ -196,31 +279,9 @@ function configurarBotonesGPS() {
     });
 }
 
-document.querySelectorAll('.form-auditoria').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        const nuevoElemento = {};
-        formData.forEach((value, key) => { nuevoElemento[key] = value; });
-        nuevoElemento.id_local = Date.now();
-
-        let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
-        pendientes.push(nuevoElemento);
-        localStorage.setItem('pendientesGPON', JSON.stringify(pendientes));
-
-        alert(`¡${nuevoElemento.Tipo_Elemento} guardado!`);
-        this.reset();
-        
-        let hoy = new Date().toISOString().split('T')[0];
-        this.querySelectorAll('.fecha-auto').forEach(el => el.value = hoy);
-        this.querySelectorAll('.auditor-auto').forEach(el => el.value = localStorage.getItem('auditor_nombre'));
-        this.querySelectorAll('.fecha-incidencia').forEach(el => el.value = hoy);
-
-        actualizarContador();
-        actualizarDashboard();
-    });
-});
-
+// ==========================================
+// CONTADORES Y SINCRONIZACIÓN
+// ==========================================
 function actualizarContador() {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     let total = pendientes.length + sectoresPendientes.length + sectoresEditados.length + sectoresEliminados.length; 
@@ -242,7 +303,6 @@ function actualizarDashboard() {
 async function sincronizarDatos(silencioso = false) {
     let pendientesForm = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     
-    // Preparamos los paquetes para enviar
     let paqueteSectoresNuevos = sectoresPendientes.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Crear", SECTOR: sec }));
     let paqueteSectoresEditados = sectoresEditados.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Editar", SECTOR_VIEJO: sec.viejo, SECTOR_NUEVO: sec.nuevo }));
     let paqueteSectoresEliminados = sectoresEliminados.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Eliminar", SECTOR: sec }));
@@ -284,7 +344,6 @@ async function sincronizarDatos(silencioso = false) {
         if (jsonRespuesta.status === "success") {
             if(!silencioso) alert("¡Sincronización exitosa con el Excel!");
             
-            // Limpiar TODAS las colas
             localStorage.removeItem('pendientesGPON');
             sectoresPendientes = [];
             sectoresEditados = [];
