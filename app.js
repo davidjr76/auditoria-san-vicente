@@ -374,21 +374,59 @@ async function sincronizarDatos(silencioso = false) {
 }
 
 async function obtenerResumenNube() {
-    if (!navigator.onLine) return;
+    if (!navigator.onLine) return alert("Necesitas internet para descargar datos del Excel.");
+    
     const btn = document.querySelector('button[onclick="obtenerResumenNube()"]');
-    if(btn) { btn.innerText = "⏳ Cargando..."; btn.disabled = true; }
+    if(btn) { btn.innerText = "⏳ Descargando IDs..."; btn.disabled = true; }
+    
     try {
         const response = await fetch(API_URL); 
         const data = await response.json();
+        
         if (data.status === "success") {
+            // 1. Actualizar totales visuales
             document.getElementById('total-postes').innerText = data.totales.postes;
             document.getElementById('total-naps').innerText = data.totales.naps;
             document.getElementById('total-empalmes').innerText = data.totales.empalmes;
+
+            // 2. GUARDAR LAS LISTAS EN LA MEMORIA DEL CELULAR
+            if (data.listas) {
+                // Unir lo que ya hay en memoria con lo que viene del Excel (para no borrar lo nuevo sin sincronizar)
+                let postesLocales = JSON.parse(localStorage.getItem('db_postes')) || [];
+                let napsLocales = JSON.parse(localStorage.getItem('db_naps')) || [];
+                let empalmesLocales = JSON.parse(localStorage.getItem('db_empalmes')) || [];
+                let troncalesLocales = JSON.parse(localStorage.getItem('db_troncales')) || [];
+                let clientesLocales = JSON.parse(localStorage.getItem('db_clientes')) || [];
+
+                let postesFinales = [...new Set([...postesLocales, ...data.listas.postes])];
+                let napsFinales = [...new Set([...napsLocales, ...data.listas.naps])];
+                let empalmesFinales = [...new Set([...empalmesLocales, ...data.listas.empalmes])];
+                let troncalesFinales = [...new Set([...troncalesLocales, ...data.listas.troncales])];
+                let clientesFinales = [...new Set([...clientesLocales, ...data.listas.clientes])];
+
+                localStorage.setItem('db_postes', JSON.stringify(postesFinales));
+                localStorage.setItem('db_naps', JSON.stringify(napsFinales));
+                localStorage.setItem('db_empalmes', JSON.stringify(empalmesFinales));
+                localStorage.setItem('db_troncales', JSON.stringify(troncalesFinales));
+                localStorage.setItem('db_clientes', JSON.stringify(clientesFinales));
+
+                // 3. Actualizar las variables globales en la App
+                db_postes = postesFinales;
+                db_naps = napsFinales;
+                db_empalmes = empalmesFinales;
+                db_troncales = troncalesFinales;
+                db_clientes = clientesFinales;
+
+                // 4. Refrescar las listas desplegables
+                actualizarRelaciones();
+                
+                alert("✅ IDs existentes descargados. Ahora puedes usar las listas desplegables con tus datos ya guardados.");
+            }
         }
     } catch (error) {
-        console.error(error);
+        alert("Error al conectar con el servidor: " + error.message);
     } finally {
-        if(btn) { btn.innerText = "☁️ Actualizar Totales de Google Sheets"; btn.disabled = false; }
+        if(btn) { btn.innerText = "☁️ Descargar IDs Existentes del Excel"; btn.disabled = false; }
     }
 }
 
