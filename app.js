@@ -6,14 +6,13 @@ const CATALOGOS = {
     buffers: ["AZUL", "NARANJA", "VERDE", "MARRON", "GRIS", "BLANCO", "ROJO", "NEGRO", "AMARILLO", "VIOLETA", "ROSA", "AQUA"]
 };
 
-// Memoria de Sectores
+// Memoria
 let sectoresCustom = JSON.parse(localStorage.getItem('sectores_custom')) || [];
 let sectoresPendientes = JSON.parse(localStorage.getItem('sectores_pendientes')) || [];
 let sectoresEditados = JSON.parse(localStorage.getItem('sectores_editados')) || [];
 let sectoresEliminados = JSON.parse(localStorage.getItem('sectores_eliminados')) || [];
 let sectorEditando = null;
 
-// Memoria de IDs (Bases de datos locales)
 let db_postes = JSON.parse(localStorage.getItem('db_postes')) || [];
 let db_naps = JSON.parse(localStorage.getItem('db_naps')) || [];
 let db_empalmes = JSON.parse(localStorage.getItem('db_empalmes')) || [];
@@ -23,6 +22,7 @@ let db_clientes = JSON.parse(localStorage.getItem('db_clientes')) || [];
 document.addEventListener('DOMContentLoaded', () => {
     cargarListasDinamicas();
     renderizarListaSectores();
+    renderizarPendientes(); // Nueva función
     actualizarRelaciones();
 
     let auditorGuardado = localStorage.getItem('auditor_nombre');
@@ -44,96 +44,62 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// VINCULACIÓN DE IDS
+// REVISAR PENDIENTES Y ELIMINAR
 // ==========================================
-function actualizarRelaciones() {
-    document.querySelectorAll('.rel-postes').forEach(sel => {
-        let v = sel.value;
-        sel.innerHTML = '<option value="">Seleccione...</option>';
-        db_postes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
-        sel.value = v;
+function renderizarPendientes() {
+    let ul = document.getElementById('lista-pendientes');
+    if(!ul) return;
+    ul.innerHTML = "";
+
+    let pendientesForm = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
+    let totalItems = pendientesForm.length + sectoresPendientes.length + sectoresEditados.length + sectoresEliminados.length;
+
+    if (totalItems === 0) {
+        ul.innerHTML = '<li class="list-group-item text-muted text-center py-4">No hay nada pendiente por sincronizar.</li>';
+        return;
+    }
+
+    // 1. Mostrar Sectores Pendientes
+    sectoresPendientes.forEach((sec, index) => {
+        ul.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-light">
+                <div><span class="badge bg-secondary me-2">Sector</span> <strong>${sec}</strong> (Nuevo)</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="eliminarPendiente('sector_nuevo', ${index})">🗑️</button>
+            </li>
+        `;
     });
 
-    document.querySelectorAll('.rel-naps').forEach(sel => {
-        let v = sel.value;
-        sel.innerHTML = '<option value="">Seleccione...</option>';
-        db_naps.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
-        sel.value = v;
-    });
-
-    document.querySelectorAll('.rel-empalmes').forEach(sel => {
-        let v = sel.value;
-        sel.innerHTML = '<option value="">Seleccione...</option>';
-        db_empalmes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
-        sel.value = v;
-    });
-
-    document.querySelectorAll('.rel-troncales').forEach(sel => {
-        let v = sel.value;
-        sel.innerHTML = '<option value="">Seleccione...</option>';
-        db_troncales.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; });
-        sel.value = v;
+    // 2. Mostrar Formularios Pendientes (Postes, NAPs, etc.)
+    pendientesForm.forEach((item, index) => {
+        let idMostrar = item.ID_Poste || item.ID_NAP || item.ID_Empalme || item.ID_Cable || item.ID_Cliente || item.ID_Incidencia || "Sin ID";
+        ul.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div><span class="badge bg-primary me-2">${item.Tipo_Elemento}</span> <strong>${idMostrar}</strong></div>
+                <button class="btn btn-sm btn-outline-danger" onclick="eliminarPendiente('formulario', ${index})">🗑️</button>
+            </li>
+        `;
     });
 }
 
-// ==========================================
-// GUARDAR FORMULARIOS Y VALIDAR DUPLICADOS
-// ==========================================
-document.querySelectorAll('.form-auditoria').forEach(form => {
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const nuevoElemento = {};
-        formData.forEach((value, key) => { nuevoElemento[key] = value; });
-        
-        let isDuplicate = false;
-        let msgError = "";
+function eliminarPendiente(tipo, index) {
+    if(!confirm("¿Seguro que deseas eliminar este registro de la lista antes de sincronizar?")) return;
 
-        if (nuevoElemento.Tipo_Elemento === 'Poste') {
-            if (db_postes.includes(nuevoElemento.ID_Poste)) { isDuplicate = true; msgError = "Este ID_Poste ya existe."; }
-        } else if (nuevoElemento.Tipo_Elemento === 'NAP') {
-            if (db_naps.includes(nuevoElemento.ID_NAP)) { isDuplicate = true; msgError = "Este ID_NAP ya existe."; }
-        } else if (nuevoElemento.Tipo_Elemento === 'Empalme') {
-            if (db_empalmes.includes(nuevoElemento.ID_Empalme)) { isDuplicate = true; msgError = "Este ID_Empalme ya existe."; }
-        } else if (nuevoElemento.Tipo_Elemento === 'Troncal') {
-            if (db_troncales.includes(nuevoElemento.ID_Cable)) { isDuplicate = true; msgError = "Este ID_Cable ya existe."; }
-        } else if (nuevoElemento.Tipo_Elemento === 'Cliente') {
-            if (db_clientes.includes(nuevoElemento.ID_Cliente)) { isDuplicate = true; msgError = "Este ID_Cliente ya existe."; }
-        }
+    if (tipo === 'sector_nuevo') {
+        sectoresPendientes.splice(index, 1);
+        localStorage.setItem('sectores_pendientes', JSON.stringify(sectoresPendientes));
+    } else if (tipo === 'formulario') {
+        let pendientesForm = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
+        pendientesForm.splice(index, 1);
+        localStorage.setItem('pendientesGPON', JSON.stringify(pendientesForm));
+    }
 
-        if (isDuplicate) {
-            return alert(`⚠️ ERROR: ${msgError}\n\nPor favor, usa un ID diferente.`);
-        }
-
-        // Guardar en bases de datos locales
-        if (nuevoElemento.Tipo_Elemento === 'Poste') { db_postes.push(nuevoElemento.ID_Poste); localStorage.setItem('db_postes', JSON.stringify(db_postes)); }
-        if (nuevoElemento.Tipo_Elemento === 'NAP') { db_naps.push(nuevoElemento.ID_NAP); localStorage.setItem('db_naps', JSON.stringify(db_naps)); }
-        if (nuevoElemento.Tipo_Elemento === 'Empalme') { db_empalmes.push(nuevoElemento.ID_Empalme); localStorage.setItem('db_empalmes', JSON.stringify(db_empalmes)); }
-        if (nuevoElemento.Tipo_Elemento === 'Troncal') { db_troncales.push(nuevoElemento.ID_Cable); localStorage.setItem('db_troncales', JSON.stringify(db_troncales)); }
-        if (nuevoElemento.Tipo_Elemento === 'Cliente') { db_clientes.push(nuevoElemento.ID_Cliente); localStorage.setItem('db_clientes', JSON.stringify(db_clientes)); }
-
-        nuevoElemento.id_local = Date.now();
-        let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
-        pendientes.push(nuevoElemento);
-        localStorage.setItem('pendientesGPON', JSON.stringify(pendientes));
-
-        alert(`¡${nuevoElemento.Tipo_Elemento} guardado correctamente!`);
-        this.reset();
-        
-        let hoy = new Date().toISOString().split('T')[0];
-        this.querySelectorAll('.fecha-auto').forEach(el => el.value = hoy);
-        this.querySelectorAll('.auditor-auto').forEach(el => el.value = localStorage.getItem('auditor_nombre'));
-        this.querySelectorAll('.fecha-incidencia').forEach(el => el.value = hoy);
-
-        actualizarRelaciones();
-        actualizarContador();
-        actualizarDashboard();
-    });
-});
+    renderizarPendientes();
+    actualizarContador();
+    actualizarDashboard();
+}
 
 // ==========================================
-// SECTORES (CRUD)
+// RESTO DE LA LÓGICA (Sectores, Listas, Guardar)
 // ==========================================
 function guardarSector() {
     let input = document.getElementById('nuevo-sector-input');
@@ -157,6 +123,7 @@ function guardarSector() {
     guardarEnMemoria();
     renderizarListaSectores();
     cargarListasDinamicas();
+    renderizarPendientes(); // Actualizar vista
     actualizarContador();
     actualizarDashboard();
 }
@@ -168,7 +135,6 @@ function prepararEdicion(sector) {
     document.getElementById('btn-accion-sector').innerText = "Guardar Cambios";
     document.getElementById('btn-accion-sector').className = "btn btn-success";
     document.getElementById('btn-cancelar-edicion').style.display = "block";
-    document.getElementById('nuevo-sector-input').focus();
 }
 
 function cancelarEdicion() {
@@ -188,6 +154,7 @@ function eliminarSector(sector) {
         guardarEnMemoria();
         renderizarListaSectores();
         cargarListasDinamicas();
+        renderizarPendientes();
         actualizarContador();
         actualizarDashboard();
     }
@@ -213,7 +180,6 @@ function renderizarListaSectores() {
     sectoresCustom.forEach(sector => {
         let esPendiente = sectoresPendientes.includes(sector);
         let badge = esPendiente ? '<span class="badge bg-warning text-dark ms-2">Nuevo</span>' : '';
-        
         ul.innerHTML += `
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>${sector} ${badge}</div>
@@ -226,17 +192,75 @@ function renderizarListaSectores() {
     });
 }
 
-// ==========================================
-// LISTAS Y GPS
-// ==========================================
+function actualizarRelaciones() {
+    document.querySelectorAll('.rel-postes').forEach(sel => {
+        let v = sel.value; sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_postes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; }); sel.value = v;
+    });
+    document.querySelectorAll('.rel-naps').forEach(sel => {
+        let v = sel.value; sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_naps.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; }); sel.value = v;
+    });
+    document.querySelectorAll('.rel-empalmes').forEach(sel => {
+        let v = sel.value; sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_empalmes.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; }); sel.value = v;
+    });
+    document.querySelectorAll('.rel-troncales').forEach(sel => {
+        let v = sel.value; sel.innerHTML = '<option value="">Seleccione...</option>';
+        db_troncales.forEach(id => { sel.innerHTML += `<option value="${id}">${id}</option>`; }); sel.value = v;
+    });
+}
+
+document.querySelectorAll('.form-auditoria').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const nuevoElemento = {};
+        formData.forEach((value, key) => { nuevoElemento[key] = value; });
+        
+        let isDuplicate = false;
+        let msgError = "";
+
+        if (nuevoElemento.Tipo_Elemento === 'Poste' && db_postes.includes(nuevoElemento.ID_Poste)) { isDuplicate = true; msgError = "Este ID_Poste ya existe."; }
+        else if (nuevoElemento.Tipo_Elemento === 'NAP' && db_naps.includes(nuevoElemento.ID_NAP)) { isDuplicate = true; msgError = "Este ID_NAP ya existe."; }
+        else if (nuevoElemento.Tipo_Elemento === 'Empalme' && db_empalmes.includes(nuevoElemento.ID_Empalme)) { isDuplicate = true; msgError = "Este ID_Empalme ya existe."; }
+        else if (nuevoElemento.Tipo_Elemento === 'Troncal' && db_troncales.includes(nuevoElemento.ID_Cable)) { isDuplicate = true; msgError = "Este ID_Cable ya existe."; }
+        else if (nuevoElemento.Tipo_Elemento === 'Cliente' && db_clientes.includes(nuevoElemento.ID_Cliente)) { isDuplicate = true; msgError = "Este ID_Cliente ya existe."; }
+
+        if (isDuplicate) return alert(`⚠️ ERROR: ${msgError}\n\nPor favor, usa un ID diferente.`);
+
+        if (nuevoElemento.Tipo_Elemento === 'Poste') { db_postes.push(nuevoElemento.ID_Poste); localStorage.setItem('db_postes', JSON.stringify(db_postes)); }
+        if (nuevoElemento.Tipo_Elemento === 'NAP') { db_naps.push(nuevoElemento.ID_NAP); localStorage.setItem('db_naps', JSON.stringify(db_naps)); }
+        if (nuevoElemento.Tipo_Elemento === 'Empalme') { db_empalmes.push(nuevoElemento.ID_Empalme); localStorage.setItem('db_empalmes', JSON.stringify(db_empalmes)); }
+        if (nuevoElemento.Tipo_Elemento === 'Troncal') { db_troncales.push(nuevoElemento.ID_Cable); localStorage.setItem('db_troncales', JSON.stringify(db_troncales)); }
+        if (nuevoElemento.Tipo_Elemento === 'Cliente') { db_clientes.push(nuevoElemento.ID_Cliente); localStorage.setItem('db_clientes', JSON.stringify(db_clientes)); }
+
+        nuevoElemento.id_local = Date.now();
+        let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
+        pendientes.push(nuevoElemento);
+        localStorage.setItem('pendientesGPON', JSON.stringify(pendientes));
+
+        alert(`¡${nuevoElemento.Tipo_Elemento} guardado correctamente!`);
+        this.reset();
+        
+        let hoy = new Date().toISOString().split('T')[0];
+        this.querySelectorAll('.fecha-auto').forEach(el => el.value = hoy);
+        this.querySelectorAll('.auditor-auto').forEach(el => el.value = localStorage.getItem('auditor_nombre'));
+        this.querySelectorAll('.fecha-incidencia').forEach(el => el.value = hoy);
+
+        actualizarRelaciones();
+        renderizarPendientes(); // ACTUALIZAR LISTA
+        actualizarContador();
+        actualizarDashboard();
+    });
+});
+
 function cargarListasDinamicas() {
     let todosLosSectores = [...sectoresCustom];
     document.querySelectorAll('select[name="SECTOR"]').forEach(select => {
         let valorActual = select.value;
         select.innerHTML = '<option value="">Seleccione...</option>'; 
-        todosLosSectores.forEach(sector => {
-            select.innerHTML += `<option value="${sector}">${sector}</option>`;
-        });
+        todosLosSectores.forEach(sector => { select.innerHTML += `<option value="${sector}">${sector}</option>`; });
         if (todosLosSectores.includes(valorActual)) select.value = valorActual;
     });
 
@@ -274,9 +298,6 @@ function configurarBotonesGPS() {
     });
 }
 
-// ==========================================
-// CONTADORES
-// ==========================================
 function actualizarContador() {
     let pendientes = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
     let total = pendientes.length + sectoresPendientes.length + sectoresEditados.length + sectoresEliminados.length; 
@@ -295,26 +316,16 @@ function actualizarDashboard() {
     document.getElementById('pend-empalmes').innerText = counts.Empalme;
 }
 
-// ==========================================
-// SINCRONIZAR Y DESCARGAR
-// ==========================================
 async function sincronizarDatos(silencioso = false) {
     let pendientesForm = JSON.parse(localStorage.getItem('pendientesGPON')) || [];
-    
     let paqueteSectoresNuevos = sectoresPendientes.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Crear", SECTOR: sec }));
     let paqueteSectoresEditados = sectoresEditados.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Editar", SECTOR_VIEJO: sec.viejo, SECTOR_NUEVO: sec.nuevo }));
     let paqueteSectoresEliminados = sectoresEliminados.map(sec => ({ Tipo_Elemento: "Sector", Accion: "Eliminar", SECTOR: sec }));
 
     let todoParaEnviar = [...pendientesForm, ...paqueteSectoresNuevos, ...paqueteSectoresEditados, ...paqueteSectoresEliminados];
 
-    if (todoParaEnviar.length === 0) {
-        if(!silencioso) alert("No hay datos nuevos para sincronizar.");
-        return;
-    }
-    if (!navigator.onLine) {
-        if(!silencioso) alert("No hay internet.");
-        return;
-    }
+    if (todoParaEnviar.length === 0) { if(!silencioso) alert("No hay datos nuevos para sincronizar."); return; }
+    if (!navigator.onLine) { if(!silencioso) alert("No hay internet."); return; }
 
     const btn = document.querySelector('.btn-info');
     const btnDash = document.querySelector('button[onclick="sincronizarDatos()"]');
@@ -326,29 +337,23 @@ async function sincronizarDatos(silencioso = false) {
 
     try {
         const response = await fetch(API_URL, {
-            method: 'POST',
-            redirect: 'follow',
+            method: 'POST', redirect: 'follow',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(todoParaEnviar)
         });
 
-        if (!response.ok) {
-            const txt = await response.text();
-            throw new Error(`Código ${response.status}: ${txt.substring(0, 100)}`);
-        }
+        if (!response.ok) throw new Error(`Código ${response.status}`);
 
         const jsonRespuesta = await response.json();
         
         if (jsonRespuesta.status === "success") {
             if(!silencioso) alert("¡Sincronización exitosa con el Excel!");
-            
             localStorage.removeItem('pendientesGPON');
-            sectoresPendientes = [];
-            sectoresEditados = [];
-            sectoresEliminados = [];
+            sectoresPendientes = []; sectoresEditados = []; sectoresEliminados = [];
             guardarEnMemoria();
             
             renderizarListaSectores();
+            renderizarPendientes();
             actualizarContador();
             actualizarDashboard();
             
@@ -375,7 +380,7 @@ async function obtenerResumenNube() {
     if (!navigator.onLine) return alert("Necesitas internet para descargar datos del Excel.");
     
     const btn = document.querySelector('button[onclick="obtenerResumenNube()"]');
-    if(btn) { btn.innerText = "⏳ Descargando Datos..."; btn.disabled = true; }
+    if(btn) { btn.innerText = "⏳ Descargando..."; btn.disabled = true; }
     
     try {
         const urlConCacheBuster = API_URL + "?t=" + new Date().getTime();
@@ -386,19 +391,18 @@ async function obtenerResumenNube() {
         const data = await response.json();
         
         if (data.status === "success") {
-            // 1. Actualizar totales
             document.getElementById('total-postes').innerText = data.totales.postes;
             document.getElementById('total-naps').innerText = data.totales.naps;
             document.getElementById('total-empalmes').innerText = data.totales.empalmes;
 
             if (data.listas) {
-                // 2. Descargar Sectores
+                // DESCARGAR SECTORES
                 let sectoresLocales = JSON.parse(localStorage.getItem('sectores_custom')) || [];
                 let sectoresFinales = [...new Set([...sectoresLocales, ...data.listas.sectores])];
                 localStorage.setItem('sectores_custom', JSON.stringify(sectoresFinales));
                 sectoresCustom = sectoresFinales;
 
-                // 3. Descargar IDs (Postes, NAPs, etc.)
+                // DESCARGAR IDs
                 let postesLocales = JSON.parse(localStorage.getItem('db_postes')) || [];
                 let napsLocales = JSON.parse(localStorage.getItem('db_naps')) || [];
                 let empalmesLocales = JSON.parse(localStorage.getItem('db_empalmes')) || [];
@@ -417,26 +421,19 @@ async function obtenerResumenNube() {
                 localStorage.setItem('db_troncales', JSON.stringify(troncalesFinales));
                 localStorage.setItem('db_clientes', JSON.stringify(clientesFinales));
 
-                db_postes = postesFinales;
-                db_naps = napsFinales;
-                db_empalmes = empalmesFinales;
-                db_troncales = troncalesFinales;
-                db_clientes = clientesFinales;
+                db_postes = postesFinales; db_naps = napsFinales; db_empalmes = empalmesFinales; db_troncales = troncalesFinales; db_clientes = clientesFinales;
 
-                // 4. Refrescar la pantalla
                 renderizarListaSectores();
                 cargarListasDinamicas();
                 actualizarRelaciones();
                 
-                alert(`✅ ¡Datos recuperados con éxito!\n\nSe descargaron:\n- ${data.listas.sectores.length} Sectores\n- ${data.listas.postes.length} Postes\n- ${data.listas.naps.length} NAPs`);
-            } else {
-                alert("⚠️ Google respondió, pero no envió las listas. Revisa el código de Apps Script.");
+                alert(`✅ ¡Datos recuperados del Excel!\n- ${data.listas.sectores.length} Sectores\n- ${data.listas.postes.length} Postes\n- ${data.listas.naps.length} NAPs`);
             }
         }
     } catch (error) {
         alert("❌ Error al conectar: " + error.message);
     } finally {
-        if(btn) { btn.innerText = "⬇️ Descargar IDs Existentes del Excel"; btn.disabled = false; }
+        if(btn) { btn.innerText = "⬇️ Descargar Datos del Excel"; btn.disabled = false; }
     }
 }
 
