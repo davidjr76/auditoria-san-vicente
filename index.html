@@ -151,7 +151,6 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion_Referencia</label><input type="text" name="Direccion_Referencia" class="form-control"></div>
                     <div class="row">
-                        <!-- Relación: Este poste viene de la lista de Postes guardados -->
                         <div class="col-6 mb-2"><label>ID_Poste (Asociado)</label>
                             <select name="ID_Poste" class="form-select rel-postes"></select>
                         </div>
@@ -181,7 +180,6 @@
                                 <option value="Dañado">Dañado</option>
                             </select>
                         </div>
-                        <!-- Relación: Esta troncal viene de la lista de Troncales guardados -->
                         <div class="col-6 mb-2"><label>Troncal_Alim</label>
                             <select name="Troncal_Alimentacion" class="form-select rel-troncales"></select>
                         </div>
@@ -267,7 +265,6 @@
                     <input type="hidden" name="Auditor" class="auditor-auto">
                     <div class="row">
                         <div class="col-6 mb-2"><label>ID_Registro</label><input type="text" name="ID_Registro" class="form-control" required></div>
-                        <!-- Relación: Este empalme viene de la lista de Empalmes guardados -->
                         <div class="col-6 mb-2"><label>ID_Empalme</label>
                             <select name="ID_Empalme" class="form-select rel-empalmes"></select>
                         </div>
@@ -390,7 +387,6 @@
                     <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3 btn-gps">📍 Capturar GPS</button>
                     <div class="mb-2"><label>Direccion</label><input type="text" name="Direccion" class="form-control"></div>
                     <div class="row">
-                        <!-- Relación: Esta NAP viene de la lista de NAPs guardadas -->
                         <div class="col-6 mb-2"><label>ID_NAP</label>
                             <select name="ID_NAP" class="form-select rel-naps"></select>
                         </div>
@@ -460,8 +456,10 @@
                         <span class="fw-bold">Pendientes en el celular:</span>
                         <span class="badge bg-danger fs-6" id="dash-pendientes-total">0</span>
                     </div>
+                    
+                    <button type="button" class="btn btn-warning text-dark w-100 fw-bold mb-2" onclick="obtenerResumenNube()">⬇️ Descargar IDs Existentes del Excel</button>
                     <button type="button" class="btn btn-primary w-100 mb-2" onclick="sincronizarDatos()">🔄 Sincronizar Todo</button>
-                    <button type="button" class="btn btn-warning text-dark w-100 fw-bold" onclick="obtenerResumenNube()">⬇️ Descargar IDs Existentes del Excel</button>
+                    
                     <div id="sync-status" class="text-center mt-2 text-muted small"></div>
                 </div>
 
@@ -489,7 +487,6 @@
                         <button class="btn btn-primary" type="button" id="btn-accion-sector" onclick="guardarSector()">Agregar</button>
                     </div>
                     <button class="btn btn-sm btn-outline-secondary w-100" id="btn-cancelar-edicion" onclick="cancelarEdicion()" style="display: none;">Cancelar Edición</button>
-                    <small class="text-muted mt-2 d-block">Los cambios se sincronizarán con el Excel al presionar "Sincronizar".</small>
                 </div>
                 
                 <div class="card p-3 shadow-sm">
@@ -497,7 +494,6 @@
                         <h5 class="text-secondary mb-0">Sectores Disponibles</h5>
                     </div>
                     <ul id="lista-sectores" class="list-group list-group-flush" style="max-height: 300px; overflow-y: auto;">
-                        <!-- Se cargan dinámicamente -->
                     </ul>
                 </div>
             </div>
